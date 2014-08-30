@@ -7,7 +7,7 @@
 
 using namespace std;
 using namespace arma;
-namespace write {int file = 1;}
+namespace use {int onealg = 0; int out = 1;}
 
 // 'solvetrid' is a function that solves a linear sistem in 'u' relative to a
 // tridiagonal matrix with diagonal elements equal to 'b', subdiagonal elements
@@ -119,9 +119,10 @@ int main(int argc, char *argv[])
     int N = atoi(argv[1]);
 
     // Perform some checks in the optional argument.
-    if(argc == 3) {
-        if(strcmp(argv[2], "nofile") == 0) write::file = 0;
-        else cout << "Wrong optional argument given. Use 'nofile' if you don't want to write output to file." << endl;
+    if(argc == 4) {
+        use::out = atoi(argv[3]);
+        if(strcmp(argv[2], "onealg") == 0 && (strcmp(argv[3], "1") == 0||strcmp(argv[3], "0") == 0)) use::onealg = 1;
+        else cout << "Wrong optional argument given. Use 'onealg 1' if you want to use only one algorithm (the fastest) and write to file; use 'onealg 0' if you instead want to write to the output file." << endl;
     }
 
     // Define the elements of the matrix related to the differential equation
@@ -135,22 +136,36 @@ int main(int argc, char *argv[])
     vec f(N), x(N);
     //for(int i = 0; i < N; i++) f[i] = i+1;
 
-    // Discretize and do the calculation
+    // Discretize and define workspace vectors
     split(f, x, N);
     vec u_temp(N), f_temp(N), err(N);
-    u_temp = u;
-    solvetrid(N, a, b, c, u_temp, f);
-    u_temp = u;
-    f_temp = f;
-    solve_special(N, u_temp, f_temp);
+
+    // Compare algorithms only if we want to do benchmarks.
+    // This is to save memory if we want just to have grid numbers.
+    if(use::onealg == 0) {
+        // Solve using 'tridig'
+        u_temp = u;
+        solvetrid(N, a, b, c, u_temp, f);
+        u_temp.reset();
+
+        // Solve using 'solve_special'
+        u_temp = u;
+        f_temp = f;
+        solve_special(N, u_temp, f_temp);
+        u_temp.reset();
+        f_temp.reset();
+    }
+
+    // Solve using 'solve_special_idx'
     solve_special_idx(N, u, f);
+    f.reset();
 
     // Compute relative error
     err = relative_error(u, x, N);
     cout << "Maximum relative error: " << err.max()*100 << "%" << endl;
 
     // Write the resulting points on the output file
-    if(write::file == 1) {
+    if(use::onealg == 1 && use::out == 1) {
         // Write the 'x' grid-points to the output file
         ofstream X;
         X.open("X.txt");

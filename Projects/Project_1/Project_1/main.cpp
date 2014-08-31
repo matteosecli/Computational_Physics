@@ -36,6 +36,9 @@ void solvetrid(int& N, float& a, float& b, float& c, vec& u, vec& f){
     // Stop timing and print elapsed time
     t = clock() - t;
     cout << "Elapsed time (solvetrid):\t\t" << ((float)t)/CLOCKS_PER_SEC << "s." << endl;
+
+    // Free space
+    gam.reset();
 }
 
 // 'solve_special' is a function that solves a special linear system
@@ -43,46 +46,20 @@ void solvetrid(int& N, float& a, float& b, float& c, vec& u, vec& f){
 // solution has been found analytically, and once the pattern in
 // the solution was recognized, it has been coded here. Warning! It
 // overwrites 'u' and 'f', so make a copy before calling the function
-// if you want to re-use them. The alogrithm performs ~8N FLOPS.
+// if you want to re-use them. The alogrithm performs ~6N FLOPS.
 void solve_special(int& N, vec& u, vec& f){
     // Start timing
     clock_t t;
     t = clock();
 
-    for(int j = 1; j < N; j++) f[j] += f[j-1]*j/(j+1);
-    u[N-1] = f[N-1]*N/(N+1);
-    for(int j = N - 2; j >= 0; j--) u[j] = (f[j] + u[j+1])*(j+1)/(j+2);
+    for(int j = 1; j < N; j++) f[j]=(j+1)*f[j]+f[j-1];
+    u[N-1] = f[N-1]/(N+1);
+    int prev_idx = N-1;
+    for(int j = N - 1; j > 0; j--) {u[j-1]=(f[j-1]+j*u[j])/prev_idx; prev_idx = j;}
 
     // Stop timing and print elapsed time
     t = clock() - t;
     cout << "Elapsed time (solve_special):\t\t" << ((float)t)/CLOCKS_PER_SEC << "s." << endl;
-}
-
-// 'solve_special_idx' is the same as 'solve_special', but it uses
-// shifted indexes to reach a (theoretical) minimum of 6N FLOPS.
-// However, the number of accesses to the memory is increased, so it
-// offers only a small improvement in speed, of the order of 1/1000s
-// over 10^8 points.
-void solve_special_idx(int& N, vec& u, vec& f){
-    // Start timing
-    clock_t t;
-    t = clock();
-
-    int prev_idx = 1;
-    for(int j = 2; j < N + 1; j++) {
-        f[j-1] += f[j-2]*prev_idx/j;
-        prev_idx = j;
-    }
-    u[N-1] = f[N-1]*N/(N+1);
-    prev_idx = N-1;
-    for(int j = N - 1; j > 0; j--) {
-        u[j-1] = (f[j-1] + u[j])*j/prev_idx;
-        prev_idx = j;
-    }
-
-    // Stop timing and print elapsed time
-    t = clock() - t;
-    cout << "Elapsed time (solve_special_idx):\t" << ((float)t)/CLOCKS_PER_SEC << "s." << endl;
 }
 
 // 'split' is a function that discretizes the function 'func',
@@ -147,22 +124,17 @@ int main(int argc, char *argv[])
         u_temp = u;
         solvetrid(N, a, b, c, u_temp, f);
         u_temp.reset();
-
-        // Solve using 'solve_special'
-        u_temp = u;
-        f_temp = f;
-        solve_special(N, u_temp, f_temp);
-        u_temp.reset();
-        f_temp.reset();
     }
 
-    // Solve using 'solve_special_idx'
-    solve_special_idx(N, u, f);
+    // Solve using 'solve_special'
+    solve_special(N, u, f);
     f.reset();
 
-    // Compute relative error
-    err = relative_error(u, x, N);
-    cout << "Maximum relative error: " << err.max()*100 << "%" << endl;
+    // Compute relative error only if 'onealg' is enabled, to speed up benchmarks
+    if(use::onealg == 1) {
+        err = relative_error(u, x, N);
+        cout << "Maximum relative error: " << err.max()*100 << "%" << endl;
+    }
 
     // Write the resulting points on the output file
     if(use::onealg == 1 && use::out == 1) {

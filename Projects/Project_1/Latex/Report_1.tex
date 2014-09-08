@@ -185,7 +185,6 @@ MATRIX 3X3:
    b & c &  0 & f_0 \\
    a & b &  c & f_1 \\
    0 & a &  b & f_2 \\
-   \cdots  & \cdots  & \cdots \\
 \end{array}	
 \right)
 \longrightarrow
@@ -290,66 +289,120 @@ Translating the above algorithm in C++ language and working only on the vector f
 
 \subsection{Particular algorithm}
 
-Using the regular Gaussian elimination algorithm we proceed to find a specific solution of our system as follows:
+Using the regular Gaussian elimination algorithm we proceed to find a specific solution of our system as follows; we will start form a 3x3 matrix as before, and then demonstrate it for a matrix of optional dimension.
+\\
+\\
+\\
+\\
+\\
+MATRIX 3X3:
 
 \begin{equation}
 \left(
-\begin{array}{cccccc|c}
-   2 & -1 &  0 & 0 & \cdots & 0 & f_0 \\
-  -1 &  2 & -1 & 0 & \cdots & 0 & f_1 \\
-   0 &-1 &  2 & -1 & \cdots & 0 & f_2\\
-  \vdots  & \vdots  & & \ddots & & \vdots & \vdots  \\
-   0 &  0 & \cdots  & -1 & 2 & -1 & f_{N-2} \\
-   0 &  0 & \cdots & \cdots  & -1 & 2 & f_{N-1} 
+\begin{array}{ccc|c}
+   2 & -1 & 0 & f_0 \\
+   -1 & 2 & -1 & f_1 \\
+   0 & -1 & 2 & f_2 \\
 \end{array}	
 \right)
 \longrightarrow
+\end{equation}
+\begin{equation}
+Passage 1:
 \left(
-\begin{array}{cccccc|c}
-   2 & -1 &  0 & 0 & \cdots & 0 & f_0 \\
-   0 &  3 & -2 & 0 & \cdots & 0 & 2 f_1+f_0 \\
-   0 & 0 &  4 & -3 & \cdots & 0 & 3 f_2+2 f_1+f_0\\
-  \vdots  & \vdots  & & \ddots & & \vdots & \vdots  \\
-   0 &  0 & \cdots  & 0 & N & -(N-1) &  (N-1) f_{N-2} + \sum_{j=0}^{N-3} (j+1)f_{j}  \\
-   0 &  0 & \cdots & \cdots  & 0 & N+1 &  \sum_{j=0}^{N-1} (j+1)f_{j} 
-\end{array}	
+\begin{array}{ccc|c}
+   2 & -1 & 0 & f_0 \\
+   0 & 3 & -2 & f_1(1+1)+f_0 \\
+   0 & 0 & 4 & f_2(2+1)+f_1 \\
+\end{array}
+\right)
+\end{equation}
+that is: $a_{i,j} \rightarrow (i+1)a_{i,j}+a{i-1,j}$ for i going from 1 to (n-1), where n is the matrix's dimension (3 in this case)
+\begin{equation}
+\longrightarrow\\
+Passage 2:
+\left(
+\begin{array}{ccc|c}
+  2 & -1 & 0 & f_0 \\
+  0 & 3 & -1 & f_1(1+1)+f_0 \\
+  0 & 0 & 1 & \frac{f_2}{3+1}\\ 
+\end{array}
+\right)
+\end{equation}
+that is: $a_{n-1, j} \rightarrow \frac{a{n-1,j}}{n+1}$ where n is the matrix's dimension
+\begin{equation}
+Passage 3:
+\longrightarrow\\
+\left(
+\begin{array}{ccc|c}
+  1 & 0 & 0 & \frac{f_0+(0+1)f_1}{0+2} \\
+  0 & 1 & 0 & \frac{f_1+(1+1)f_2}{1+2} \\
+  0 & 0 & 1 & \frac{f_2}{3+1} \\
+\end{array}
+\right)
+\end{equation}
+that is $a_{i,j} \rightarrow \frac{a_{i,j}+(i+1)a_{i+1,j}}{i+2}$ for i going from 0 to (n-1)
+\\
+Now it's very simple to solve the system.
+\\
+\\
+\\
+MATRIX (n+1)x(n+1)
+
+We focus only on the tridiagonal matrix and try to obtain the unitary matrix; to do this let's to passage 1 until the n+1 row.
+
+\begin{equation}
+\left(
+\begin{array}{ccccc}
+  2 & -1 & 0 & 0 & \cdots \\
+  0 & 3 & -2 & 0 & \cdots \\
+  \cdots & \cdots & \cdots & \cdots & \cdots \\
+  \cdots & \cdots & \cdots & n+2 & -(n+1) \\
+  \cdots & \cdots & \cdots & -1 & 2 \\
+\end{array}
+\right)
+\end{equation}
+and simply subtracting, from the n-row, the (n+1)-row multiplied for bet(n)/c:
+\begin{equation}
+\left(
+\begin{array}{ccccc}
+  1 & c/b & 0 & 0 & \cdots \\
+  0 & 1 & \frac{c}{b-ac/b} & 0 & \cdots \\
+  \cdots & \cdots & \cdots & \cdots & \cdots \\
+  \cdots & \cdots & \cdots & 1 & 0 \\
+  \cdots & \cdots & \cdots & 0 & 1 \\
+\end{array}
 \right)
 \end{equation}
 
-We therefore know ahead of times the explicit form of the matrix in upper triangular form and are able to compute all the constant terms of the system as follows
+Now, ignoring the (n+1)-row and the (n+1)-column, we have a nxn matrix which we can bring back to the identity going on with the passage 3.
+\\
+\\
+\\
+ALGORITHM IN C++
 
-$$\tilde{f}_i= \sum_{j=0}^{i}(j+1) f_j$$
-
-However, we don't need to compute the sum every time, since we can compute $\tilde{f}_i$ knowing $\tilde{f}_{i-1}$:
-
-$$\tilde{f}_i=(i+1)f_i+\tilde{f}_{i-1}$$
-
-Once this forward computations are completed, it is possible to proceed with a back substitution, knowing that
-
-$$u_{N-1}=\frac{1}{N+1} \tilde{f}_{N-1}$$
-
-we are able to find the vector of solutions $u_i$
-
-$$u_i=\frac{1}{i+2} (\tilde{f}[i]+ (i+1) u[i+1])$$
-
-Translating the algorithm in C++ code we obtain the following cycle:
+Translating the above algorithm in C++ language and working only on the vector f and on the solution vector u, we obtain the following code:
 
 \begin{lstlisting}[language=cpp]
-	for (i=1; i!=n; i++) {
-		f[i]=(i+1)*f[i]+f[i-1];
-	}
-	u[n-1]=f[n-1]/(n+1);
-	for (i=n-2; i>=0; i--) {
-		u[i]=(f[i]+(i+1)*u[i+1])/(i+2);
-	}
+	u[0]=f[0]/(bet=b);
+    for(int j = 1; j < N; j++) {
+        gam[j]=c/bet;
+        bet=b-a*gam[j];
+        u[j]=(f[j]-a*u[j-1])/bet;
+    }
+    for (int j = (N-2); j >= 0; j--) u[j] -= gam[j+1]*u[j+1];
 \end{lstlisting}
-
-Similarly to the previous code of section 1.2 this algorithm is characterized by 2 for cycles and therefore the time required for the solution increase linearly with the number of points used.
-
-Moreover, this program allows us to use a minimal amount of memory, storing only the vector f and the solution u. 
-
-We will now prove by induction con the dimension of the matrix the validity of the algorithm. We will first prove it for a matrix of $3 \times 3$ dimension and then prove that given  
-
 \subsection{Errors}
+
+
+
+\subsection{Time}
+
+\begin{figure}[ht]
+ \centering
+   {\includegraphics[width=12cm]{times.eps}}
+ \caption{***}
+\end{figure}
+
 
 \end{document}

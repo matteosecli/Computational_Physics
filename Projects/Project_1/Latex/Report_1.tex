@@ -518,8 +518,8 @@ We will now study how the program performs as a function of the dimension of the
 
 In Figure \ref{fig:times} we can notice how a specialized algorithm is indeed able to significantly cut down the time required for the computation of the solution.
 In fact, we can easily notice how, with a standard Gaussian elimination, the required time for solving a $2 \times 10^2$  dimensional matrix is the same it takes for the specialized algorithm to compute $10^6$ points. This yields clearly to a much higher degree of precision and a better deployment of resources.
-As a matter of fact, counting the number of operations contained in the specialised algorithm is $8N$, whereas for the LU decomposition it should amount to $N^2+N^3$. Unfortunately we are unable to appreciate this cubic function, given the scarcity of data, however the slope of the curve is much higher.
-Moreover both the 'special algorithm' and the 'optimized tridiagonal' are composed by $8N$, however there is a clear but not overwhelming difference. 
+As a matter of fact, counting the number of operations contained in the specialised algorithm is $6N$, whereas for the LU decomposition it should amount to $N^2+N^3$. Unfortunately we are unable to appreciate this cubic function, given the scarcity of data, however the slope of the curve is much higher.
+Moreover the 'optimized tridiagonal' is characterized by $8N$ operations and we are able to notice a clear but not overwhelming difference. 
 
 It is also possible to notice how the Gaussian elimination managed to be faster than the Standard LU, this is probably due to the fact that our particular matrix was composed by a really high number of zeroes and armadillo was supposedly able to avoid unnecessary operations among zeroes, thus reducing the computation time.
 

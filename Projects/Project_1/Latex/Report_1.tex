@@ -173,9 +173,9 @@ Using the matrix representation, we can write equation (\ref{differential_eq}) a
 
 Note how, with this system it is already implied that $f(0)=0$ e $f(L)=0$, since the first and last equations state that
 
-$$h^2 f_0=\frac{2 u_0-u_1}{h^2}=\frac{-1 u_{-1}+2 u_0-u_1}{h^2}$$
+$$h^2 f_0 = 2 u_0-u_1 = -1 u_{-1}+2 u_0-u_1$$
 
-$$h^2 f_{N-1}=\frac{-u_{N-2}+2 u_{N-1}}{h^2}=\frac{-u_{N-2}+2 u_{N-1}-u_N}{h^2}$$ 
+$$h^2 f_{N-1} = -u_{N-2}+2 u_{N-1} =  -u_{N-2}+2 u_{N-1}-u_N$$ 
 
 Since the boundary conditions of the differential equations state that $u_{-1}=u(0)=0$ and $u_{N}=u(L)=0$.  
 
@@ -213,121 +213,101 @@ A general tridiagonal system can be expressed as
  \end{pmatrix}
 \end{equation}
 
-We will describe the algorithm we used for this system first for a 3x3 tridiagonal matrix, and after we will demonstrare its validity for a square tridiagonal matrix of optional dimension.
-\\
-\\
-\\
-\\
-\\
-MATRIX 3X3:
+We will describe the algorithm we used for this system first for a $3\times3$ tridiagonal matrix, and after we will demonstrate its validity for a square tridiagonal matrix of optional dimension.
 
-\begin{equation}
-\left(
-\begin{array}{ccc|c}
-   b & c &  0 & f_0 \\
-   a & b &  c & f_1 \\
-   0 & a &  b & f_2 \\
-\end{array}	
-\right)
-\longrightarrow
-\end{equation}
-\begin{equation}
-Passage 1:
-\left(
-\begin{array}{ccc|c}
-   1 & c/b & 0 & f_0/b \\
-   a & b & c & f_1 \\
-   0 & a & b & f_2 \\
-\end{array}
-\right)
-\longrightarrow\\
-\end{equation}
-\begin{equation}
-Passage 2:
-\left(
-\begin{array}{ccc|c}
-  1 & c/b & 0 & f_0/b \\
-  0 & \frac{b-(c/b)a)}{b-(c/b)a} & \frac{c}{(b-(c/b)a} & \frac{f_1-af_0}{b-(c/b)a} \\
-  0 & 0 & \frac{b-\frac{ac}{b-ac/b}}{b-\frac{ac}{b-ac/b}} & \frac{f_2-af_1}{b-\frac{ac}{b-ac/b}} \\ 
-\end{array}
-\right)
-=
-\left(
-\begin{array}{ccc|c}
-  1 & c/b & 0 & f_0/b \\
-  0 & 1 & \frac{c}{b-ac/b} & \frac{f_1-af_0}{b-(c/b)a} \\
-  0 & 0 & 1 & \frac{f_2-af_1}{b-\frac{ac}{b-ac/b}} \\ 
-\end{array}
-\right)
-\longrightarrow\\\
-\end{equation}
-\begin{equation}
-Passage 3:
-\left(
-\begin{array}{ccc|c}
-  1 & 0 & 0 & f_0/b-f_1(c/b) \\
-  0 & 1 & 0 & \frac{f_1-af_0}{b-(c/b)a}-f_2\frac{c}{b-ac/b} \\
-  0 & 0 & 1 & \frac{f_2-af_1}{b-\frac{ac}{b-ac/b}} \\
-\end{array}
-\right)
-\end{equation}
+\begin{itemize}
+	\item $3 \times 3$ matrix:
+	\begin{align*}
+		\left(
+		\begin{array}{ccc|c}
+		   b & c &  0 & f_0 \\
+		   a & b &  c & f_1 \\
+		   0 & a &  b & f_2 \\
+		\end{array}	
+		\right)
+		&\overset{\text{Passage 1}}{\longrightarrow}
+		\left(
+		\begin{array}{ccc|c}
+		   1 & c/b & 0 & f_0/b \\
+		   a & b & c & f_1 \\
+		   0 & a & b & f_2 \\
+		\end{array}
+		\right) \\
+		&\overset{\text{Passage 2}}{\longrightarrow}
+		\left(
+		\begin{array}{ccc|c}
+		  1 & c/b & 0 & f_0/b \\
+		  0 & \frac{b-(c/b)a)}{b-(c/b)a} & \frac{c}{(b-(c/b)a} & \frac{f_1-af_0}{b-(c/b)a} \\
+		  0 & 0 & \frac{b-\frac{ac}{b-ac/b}}{b-\frac{ac}{b-ac/b}} & \frac{f_2-af_1}{b-\frac{ac}{b-ac/b}} \\ 
+		\end{array}
+		\right)
+		=
+		\left(
+		\begin{array}{ccc|c}
+		  1 & c/b & 0 & f_0/b \\
+		  0 & 1 & \frac{c}{b-ac/b} & \frac{f_1-af_0}{b-(c/b)a} \\
+		  0 & 0 & 1 & \frac{f_2-af_1}{b-\frac{ac}{b-ac/b}} \\ 
+		\end{array}
+		\right) \\
+		&\overset{\text{Passage 3}}{\longrightarrow}
+		\left(
+		\begin{array}{ccc|c}
+		  1 & 0 & 0 & f_0/b-f_1(c/b) \\
+		  0 & 1 & 0 & \frac{f_1-af_0}{b-(c/b)a}-f_2\frac{c}{b-ac/b} \\
+		  0 & 0 & 1 & \frac{f_2-af_1}{b-\frac{ac}{b-ac/b}} \\
+		\end{array}
+		\right)
+	\end{align*}
+	Now it's very simple to solve the system.
 
-Now it's very simple to solve the system.
-\\
-\\
-\\
-MATRIX (n+1)x(n+1)
+\item $(n+1) \times (n+1)$ matrix.
 
-Before starting to demonstrate that the above passages can be done also for a (n+1)x(n+1) matrix, supposed that they work for a nxn one, we can notice that, in general, for a square matrix of optional dimension N, doing the passage 2 until the penultime row we obtain:
+	Before starting to demonstrate that the above passages can be done also for a $(n+1) \times (n+1)$ matrix, supposed that they work for a $n \times n$ one, we can notice that, in general, for a square matrix of optional dimension $N$, doing the passage 2 until the penultimate row we obtain:
+	$$A_{N-1,N}=\frac{c}{bet(N-1)}$$
+	where 
+	$$bet(n)=b_0-\dfrac{ac}{b_1-\dfrac{ac}{b_2-\dfrac{ac}{\dfrac{\cdots}{b_{n-1}-\dfrac{ac}{b_n}}}}}$$
+	(here all the $b_i's$ have the same value; the index i helps only to count them).
+	
+	Now we do the passage 2 until the last row (we focus only on the tridiagonal matrix; if we manage to obtain the unitary matrix the system is solved); we obtain:
+	\begin{equation}
+	\left(
+	\begin{array}{ccccc}
+	  1 & c/b & 0 & 0 & \cdots \\
+	  0 & 1 & \frac{c}{b-ac/b} & 0 & \cdots \\
+	  \cdots & \cdots & \cdots & \cdots & \cdots \\
+	  \cdots & \cdots & \cdots & 1 & c/bet(n) \\
+	  \cdots & \cdots & \cdots & 0 & 1 \\
+	\end{array}
+	\right)
+	\end{equation}
+	and simply subtracting, from the n-row, the (n+1)-row multiplied for bet(n)/c:
+	\begin{equation}
+	\left(
+	\begin{array}{ccccc}
+	  1 & c/b & 0 & 0 & \cdots \\
+	  0 & 1 & \frac{c}{b-ac/b} & 0 & \cdots \\
+	  \cdots & \cdots & \cdots & \cdots & \cdots \\
+	  \cdots & \cdots & \cdots & 1 & 0 \\
+	  \cdots & \cdots & \cdots & 0 & 1 \\
+	\end{array}
+	\right)
+	\end{equation}
+	Now, ignoring the (n+1)-row and the (n+1)-column, we have a nxn matrix which we can bring back to the identity going on with the passage 3.
 
-$$A_{N-1,N}=\frac{c}{bet(N-1)}$$
-where 
-$$bet(n)=b_0-\dfrac{ac}{b_1-\dfrac{ac}{b_2-\dfrac{ac}{\dfrac{\cdots}{b_{n-1}-\dfrac{ac}{b_n}}}}}$$
-(here all the $b_i's$ have the same value; the index i helps only to count them).
+\item Algorithm in C++
 
-Now we do the passage 2 until the last row (we focus only on the tridiagonal matrix; if we manage to obtain the unitary matrix the system is solved); we obtain:
+	Translating the above algorithm in C++ language and working only on the vector f and on the solution vector u, we obtain the following code:
+	\begin{lstlisting}[language=cpp]
+		u[0]=f[0]/(bet=b);
+	    for(int j = 1; j < N; j++) {
+	        gam[j]=c/bet;
+	        bet=b-a*gam[j];
+	        u[j]=(f[j]-a*u[j-1])/bet;
+	    }
+	    for (int j = (N-2); j >= 0; j--) u[j] -= gam[j+1]*u[j+1];
+	\end{lstlisting}
 
-\begin{equation}
-\left(
-\begin{array}{ccccc}
-  1 & c/b & 0 & 0 & \cdots \\
-  0 & 1 & \frac{c}{b-ac/b} & 0 & \cdots \\
-  \cdots & \cdots & \cdots & \cdots & \cdots \\
-  \cdots & \cdots & \cdots & 1 & c/bet(n) \\
-  \cdots & \cdots & \cdots & 0 & 1 \\
-\end{array}
-\right)
-\end{equation}
-and simply subtracting, from the n-row, the (n+1)-row multiplied for bet(n)/c:
-\begin{equation}
-\left(
-\begin{array}{ccccc}
-  1 & c/b & 0 & 0 & \cdots \\
-  0 & 1 & \frac{c}{b-ac/b} & 0 & \cdots \\
-  \cdots & \cdots & \cdots & \cdots & \cdots \\
-  \cdots & \cdots & \cdots & 1 & 0 \\
-  \cdots & \cdots & \cdots & 0 & 1 \\
-\end{array}
-\right)
-\end{equation}
-
-Now, ignoring the (n+1)-row and the (n+1)-column, we have a nxn matrix which we can bring back to the identity going on with the passage 3.
-\\
-\\
-\\
-ALGORITHM IN C++
-
-Translating the above algorithm in C++ language and working only on the vector f and on the solution vector u, we obtain the following code:
-
-\begin{lstlisting}[language=cpp]
-	u[0]=f[0]/(bet=b);
-    for(int j = 1; j < N; j++) {
-        gam[j]=c/bet;
-        bet=b-a*gam[j];
-        u[j]=(f[j]-a*u[j-1])/bet;
-    }
-    for (int j = (N-2); j >= 0; j--) u[j] -= gam[j+1]*u[j+1];
-\end{lstlisting}
+\end{itemize}
 
 \subsection{Particular algorithm}
 
@@ -376,114 +356,13 @@ $$u_i=\frac{1}{i+2} (\tilde{f}[i]+ (i+1) u[i+1])$$
 Translating the algorithm in C++ code we obtain the following cycle:
 
 \begin{lstlisting}[language=cpp]
-	for (i=1; i!=n; i++) {
-		f[i]=(i+1)*f[i]+f[i-1];
-	}
-	u[n-1]=f[n-1]/(n+1);
-	for (i=n-2; i>=0; i--) {
-		u[i]=(f[i]+(i+1)*u[i+1])/(i+2);
-	}
-\end{lstlisting}
-
-Similarly to the previous code of section 1.2 this algorithm is characterized by 2 for cycles and therefore the time required for the solution increase linearly with the number of points used.
-
-Moreover, this program allows us to use a minimal amount of memory, storing only the vector f and the solution u. 
-
-
-Using the regular Gaussian elimination algorithm we proceed to find a specific solution of our system as follows; we will start form a 3x3 matrix as before, and then demonstrate it for a matrix of optional dimension.
-\\
-\\
-MATRIX 3X3:
-
-\begin{equation}
-\left(
-\begin{array}{ccc|c}
-   2 & -1 & 0 & f_0 \\
-   -1 & 2 & -1 & f_1 \\
-   0 & -1 & 2 & f_2 \\
-\end{array}    
-\right)
-\end{equation}
-\begin{equation}
-Passage 1:
-\left(
-\begin{array}{ccc|c}
-   2 & -1 & 0 & f_0 \\
-   0 & 3 & -2 & f_1(1+1)+f_0 \\
-   0 & 0 & 4 & f_2(2+1)+f_1 \\
-\end{array}
-\right)
-\end{equation}
-that is: $a_{i,j} \rightarrow (i+1)a_{i,j}+a_{i-1,j}$ for i going from 1 to (n-1), where n is the matrix's dimension (3 in this case)
-\begin{equation}
-Passage 2:
-\left(
-\begin{array}{ccc|c}
-  2 & -1 & 0 & f_0 \\
-  0 & 3 & -1 & f_1(1+1)+f_0 \\
-  0 & 0 & 1 & \frac{f_2}{3+1}\\ 
-\end{array}
-\right)
-\end{equation}
-that is: $a_{n-1,j} \rightarrow \frac{a_{n-1,j}}{n+1}$ where n is the matrix's dimension
-\begin{equation}
-Passage 3:
-\left(
-\begin{array}{ccc|c}
-  1 & 0 & 0 & \frac{f_0+(0+1)f_1}{0+2} \\
-  0 & 1 & 0 & \frac{f_1+(1+1)f_2}{1+2} \\
-  0 & 0 & 1 & \frac{f_2}{3+1} \\
-\end{array}
-\right)
-\end{equation}
-that is $a_{i,j} \rightarrow \frac{a_{i,j}+(i+1)a_{i+1,j}}{i+2}$ for i going from 0 to (n-2)
-\\
-Now it's very simple to solve the system.
-\\
-\\
-\\
-MATRIX (n+1)x(n+1)
-
-We focus only on the tridiagonal matrix and try to obtain the unitary matrix; to do this let's to passage 1 until the n row.
-
-\begin{equation}
-\left(
-\begin{array}{ccccc}
-  2 & -1 & 0 & 0 & \cdots \\
-  0 & 3 & -2 & 0 & \cdots \\
-  \cdots & \cdots & \cdots & \cdots & \cdots \\
-  \cdots & \cdots & \cdots & n+2 & -(n+1) \\
-  \cdots & \cdots & \cdots & 0 & n+3 \\
-\end{array}
-\right)
-\end{equation}
-Now let's add passage 2 on the n row and passage 3 on the n-1 row
-\begin{equation}
-\left(
-\begin{array}{ccccc}
-  2 & -1 & 0 & 0 & \cdots \\
-  0 & 3 & -2 & 0 & \cdots \\
-  \cdots & \cdots & \cdots & \cdots & \cdots \\
-  \cdots & \cdots & \cdots & 1 & 0 \\
-  \cdots & \cdots & \cdots & 0 & 1 \\
-\end{array}
-\right)
-\end{equation}
-
-Now, ignoring the n-row and the n-column, we have a (n-1)x(n-1) matrix which we can bring back to the identity going on with the passage 3.
-\\
-\\
-\\
-ALGORITHM IN C++
-
-Translating the above algorithm in C++ language and working only on the vector f and on the solution vector u, we obtain the following code (N is the matrix's dimension):
-
-\begin{lstlisting}[language=cpp]
     for(int j = 1; j < N; j++) f[j]=(j+1)*f[j]+f[j-1];
     u[N-1] = f[N-1]/(N+1);
     int prev_idx = N;
     for(int j = N - 1; j > 0; j--) {u[j-1]=(f[j-1]+j*u[j])/prev_idx; prev_idx = j;}
-\end{lstlisting}+
+\end{lstlisting}
+
+Note that in the code provided here the indexes are shifted in order to reach a theoretical number of FLOPS equal to $6N$. Further we will discuss better about FLOPS in our program.
 
 \section{Solution of the differential equation}
 

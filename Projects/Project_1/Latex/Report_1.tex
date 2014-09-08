@@ -137,11 +137,11 @@ Using Taylor expansion it is possible to express the second derivative of a func
 	u''(x)= \frac{u(x-h)-2 u(x)+u(x+h)}{h^2}+ \O (h^2)
 \end{equation}
 
-We are therefore able to discretize equation (\ref{differential_eq}) using $N$ points, obtaining:
+It is possible to discretize equation (\ref{differential_eq}) using $N$ points, obtaining:
 
 $$u''_i= \frac{u_{i-1}-2 u_i+u_{i+1}}{h^2}=-f_i \quad \quad i \in \left\lbrace 1 \cdots N\right\rbrace$$
 
-Using the matrix representation, we can write equation (\ref{differential_eq}) as
+Using the matrix representation, we can write equation (\ref{differential_eq}) as s system of linear equations
 
 \begin{equation}
  \begin{pmatrix}
@@ -176,7 +176,7 @@ Note how, with this system it is already implied that $f(0)=0$ e $f(L)=0$, since
 $$h^2 f_0 = 2 u_0-u_1 = -1 u_{-1}+2 u_0-u_1$$
 $$h^2 f_{N-1} = -u_{N-2}+2 u_{N-1} =  -u_{N-2}+2 u_{N-1}-u_N$$ 
 
-Since the boundary conditions of the differential equations state that $u_{-1}=u(0)=0$ and $u_{N}=u(L)=0$.  
+This follows from the boundary conditions of the differential equations that state that $u_{-1}=u(0)=0$ and $u_{N}=u(L)=0$.  
 
 This linear system is indeed very particular and has a clear pattern. We will first focus on finding a solving algorithm for a general tridiagonal matrix and after we will try to implement another program to solve this particular system with the intent of lowering the number of calculation and therefore the computation time.
 
@@ -212,7 +212,7 @@ A general tridiagonal system can be expressed as
  \end{pmatrix}
 \end{equation}
 
-We will describe the algorithm we used for this system first for a $3\times3$ tridiagonal matrix, and after we will demonstrate its validity for a square tridiagonal matrix of optional dimension.
+We will describe the algorithm we used for this system first for a $3\times3$ tridiagonal matrix, and after we will demonstrate its validity for a square tridiagonal matrix of whatever dimension (proof by induction). We will also limit to the case $c_0=c_1=...=c_{N-2}$,$a_0=a_1=...=a_{N-2}$ and $b_0=b_1=...=b_{N-1}$. 
 
 \begin{itemize}
 	\item $3 \times 3$ matrix:
@@ -352,7 +352,19 @@ we are able to find the vector of solutions $u_i$
 
 $$u_i=\frac{1}{i+2} (\tilde{f}[i]+ (i+1) u[i+1])$$
 
-Translating the algorithm in C++ code we obtain the following cycle:
+Translating the algorithm in C++ code we obtain the following cycle. 
+
+\begin{lstlisting}[language=cpp]
+for (i=1; i!=n; i++) {
+	f[i]=(i+1)*f[i]+f[i-1];
+}
+u[n-1]=f[n-1]/(n+1);
+for (i=n-2; i>=0; i--) {
+	u[i]=(f[i]+(i+1)*u[i+1])/(i+2);
+}
+\end{lstlisting}
+
+In order to obtain less operations, we have implemented in the following code a shift of index. The difference, however was marginally appreciable and barely noticeable (around $1\%$ to $2 \%$ relative increase of speed).
 
 \begin{lstlisting}[language=cpp]
     for(int j = 1; j < N; j++) f[j]=(j+1)*f[j]+f[j-1];

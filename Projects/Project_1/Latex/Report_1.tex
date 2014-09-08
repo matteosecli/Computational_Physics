@@ -347,6 +347,67 @@ Similarly to the previous code of section 1.2 this algorithm is characterized by
 Moreover, this program allows us to use a minimal amount of memory, storing only the vector f and the solution u. 
 
 
+\subsection{Particular algorithm}
+
+Using the regular Gaussian elimination algorithm we proceed to find a specific solution of our system as follows:
+
+\begin{equation}
+\left(
+\begin{array}{cccccc|c}
+   2 & -1 &  0 & 0 & \cdots & 0 & f_0 \\
+  -1 &  2 & -1 & 0 & \cdots & 0 & f_1 \\
+   0 &-1 &  2 & -1 & \cdots & 0 & f_2\\
+  \vdots  & \vdots  & & \ddots & & \vdots & \vdots  \\
+   0 &  0 & \cdots  & -1 & 2 & -1 & f_{N-2} \\
+   0 &  0 & \cdots & \cdots  & -1 & 2 & f_{N-1} 
+\end{array}	
+\right)
+\longrightarrow\
+\left(
+\begin{array}{cccccc|c}
+   2 & -1 &  0 & 0 & \cdots & 0 & f_0 \\
+   0 &  3 & -2 & 0 & \cdots & 0 & 2 f_1+f_0 \\
+   0 & 0 &  4 & -3 & \cdots & 0 & 3 f_2+2 f_1+f_0\\
+  \vdots  & \vdots  & & \ddots & & \vdots & \vdots  \\
+   0 &  0 & \cdots  & 0 & N & -(N-1) &  (N-1) f_{N-2} + \sum_{j=0}^{N-3} (j+1)f_{j}  \\
+   0 &  0 & \cdots & \cdots  & 0 & N+1 &  \sum_{j=0}^{N-1} (j+1)f_{j} 
+\end{array}	
+\right)
+\end{equation}
+
+We therefore know ahead of times the explicit form of the matrix in upper triangular form and are able to compute all the constant terms of the system as follows
+
+$$\tilde{f}_i= \sum_{j=0}^{i}(j+1) f_j$$
+
+However, we don't need to compute the sum every time, since we can compute $\tilde{f}_i$ knowing $\tilde{f}_{i-1}$:
+
+$$\tilde{f}_i=(i+1)f_i+\tilde{f}_{i-1}$$
+
+Once this forward computations are completed, it is possible to proceed with a back substitution, knowing that
+
+$$u_{N-1}=\frac{1}{N+1} \tilde{f}_{N-1}$$
+
+we are able to find the vector of solutions $u_i$
+
+$$u_i=\frac{1}{i+2} (\tilde{f}[i]+ (i+1) u[i+1])$$
+
+Translating the algorithm in C++ code we obtain the following cycle:
+
+\begin{lstlisting}[language=cpp]
+	for (i=1; i!=n; i++) {
+		f[i]=(i+1)*f[i]+f[i-1];
+	}
+	u[n-1]=f[n-1]/(n+1);
+	for (i=n-2; i>=0; i--) {
+		u[i]=(f[i]+(i+1)*u[i+1])/(i+2);
+	}
+\end{lstlisting}
+
+Similarly to the previous code of section 1.2 this algorithm is characterized by 2 for cycles and therefore the time required for the solution increase linearly with the number of points used.
+
+Moreover, this program allows us to use a minimal amount of memory, storing only the vector f and the solution u. 
+
+
 Using the regular Gaussian elimination algorithm we proceed to find a specific solution of our system as follows; we will start form a 3x3 matrix as before, and then demonstrate it for a matrix of optional dimension.
 \\
 \\
@@ -360,7 +421,6 @@ MATRIX 3X3:
    0 & -1 & 2 & f_2 \\
 \end{array}    
 \right)
-\longrightarrow
 \end{equation}
 \begin{equation}
 Passage 1:
@@ -372,9 +432,8 @@ Passage 1:
 \end{array}
 \right)
 \end{equation}
-that is: $a_{i,j} \rightarrow (i+1)a_{i,j}+a{i-1,j}$ for i going from 1 to (n-1), where n is the matrix's dimension (3 in this case)
+that is: $a_{i,j} \rightarrow (i+1)a_{i,j}+a_{i-1,j}$ for i going from 1 to (n-1), where n is the matrix's dimension (3 in this case)
 \begin{equation}
-\longrightarrow\\
 Passage 2:
 \left(
 \begin{array}{ccc|c}
@@ -384,10 +443,9 @@ Passage 2:
 \end{array}
 \right)
 \end{equation}
-that is: $a_{n-1, j} \rightarrow \frac{a{n-1,j}}{n+1}$ where n is the matrix's dimension
+that is: $a_{n-1,j} \rightarrow \frac{a_{n-1,j}}{n+1}$ where n is the matrix's dimension
 \begin{equation}
 Passage 3:
-\longrightarrow\\
 \left(
 \begin{array}{ccc|c}
   1 & 0 & 0 & \frac{f_0+(0+1)f_1}{0+2} \\
@@ -461,7 +519,7 @@ We will now study how the program performs as a function of the dimension of the
 
 In Figure (1) we can notice how a specialized algorithm is indeed able to significantly cut down the time required for the computation of the solution.
 In fact, we can easily notice how, with a standard Gaussian elimination, the required time for solving a $2 \times 10^2$  dimensional matrix is the same it takes for the specialized algorithm to compute $10^6$ points. This yields clearly to a much higher degree of precision and a better deployment of resources.
-As a matter of fact, counting the number of operations contained in the for cycle for the specialised algorithm is 
+As a matter of fact, counting the number of operations contained in the specialised algorithm is $8N$, whereas for the Gaussian elimination it should amount to $\frac{1}{3} N^3$. 
 
 
 \newpage

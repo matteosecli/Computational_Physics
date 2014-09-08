@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
-<!-- Written by QtCreator 3.1.2, 2014-09-04T11:32:00. -->
+<!-- Written by QtCreator 3.1.2, 2014-09-08T15:27:56. -->
 <qtcreator>
  <data>
   <variable>ProjectExplorer.Project.ActiveTarget</variable>
@@ -153,7 +153,7 @@
      <value type="int">14</value>
     </valuelist>
     <value type="QString" key="CMakeProjectManager.CMakeRunConfiguation.Title">Project_1</value>
-    <value type="QString" key="CMakeProjectManager.CMakeRunConfiguration.Arguments">100</value>
+    <value type="QString" key="CMakeProjectManager.CMakeRunConfiguration.Arguments">20 onealg 0</value>
     <value type="bool" key="CMakeProjectManager.CMakeRunConfiguration.UseTerminal">true</value>
     <value type="QString" key="CMakeProjectManager.CMakeRunConfiguration.UserWorkingDirectory"></value>
     <value type="int" key="PE.EnvironmentAspect.Base">2</value>

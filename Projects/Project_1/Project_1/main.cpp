@@ -119,7 +119,7 @@ void solve_special(int& N, vec& u, vec& f){
 
     for(int j = 1; j < N; j++) f[j]=(j+1)*f[j]+f[j-1];
     u[N-1] = f[N-1]/(N+1);
-    int prev_idx = N-1;
+    int prev_idx = N;
     for(int j = N - 1; j > 0; j--) {u[j-1]=(f[j-1]+j*u[j])/prev_idx; prev_idx = j;}
 
     // Stop timing and print elapsed time
@@ -146,7 +146,7 @@ void split(vec& f, vec& x, int& N) {
 vec relative_error(vec& u, vec& x, int& N) {
     vec err(N);
     err[0] = 0;
-    for(int i = 0; i < N-1; i++){
+    for(int i = 0; i <= N-1; i++){
         err[i] = abs( u[i]/(1-(1-exp(-10))*x[i]-exp(-10*x[i])) - 1 );
     }
     return err;

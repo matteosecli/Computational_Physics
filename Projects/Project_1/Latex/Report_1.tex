@@ -173,9 +173,9 @@ Using the matrix representation, we can write equation (\ref{differential_eq}) a
 
 Note how, with this system it is already implied that $f(0)=0$ e $f(L)=0$, since the first and last equations state that
 
-$$h^2 f_0 = 2 u_0-u_1 = -1 u_{-1}+2 u_0-u_1$$
+$$h^2 f_0=\frac{2 u_0-u_1}{h^2}=\frac{-1 u_{-1}+2 u_0-u_1}{h^2}$$
 
-$$h^2 f_{N-1} = -u_{N-2}+2 u_{N-1} =  -u_{N-2}+2 u_{N-1}-u_N$$ 
+$$h^2 f_{N-1}=\frac{-u_{N-2}+2 u_{N-1}}{h^2}=\frac{-u_{N-2}+2 u_{N-1}-u_N}{h^2}$$ 
 
 Since the boundary conditions of the differential equations state that $u_{-1}=u(0)=0$ and $u_{N}=u(L)=0$.  
 
@@ -364,6 +364,9 @@ Translating the algorithm in C++ code we obtain the following cycle:
 
 Note that in the code provided here the indexes are shifted in order to reach a theoretical number of FLOPS equal to $6N$. Further we will discuss better about FLOPS in our program.
 
+\subsection{Other algorithms}
+We have also computed the solution using other algorithms, namely the LU decomposition and the standard Gaussian elimination. Both of these apply to general matrices and therefore are expected to perform not as well as the other ones. We will observe such differences in the next paragraph, when we will compare the different elapsed times. For this algorithms we took advantage of an external library, armadillo, as can be see in the script in Section \ref{sec:code}.
+
 \section{Solution of the differential equation}
 
 Given our differential equation
@@ -385,39 +388,46 @@ This function will be used to calculate the errors caused by our numerical appro
 
 We will now study how the program performs as a function of the dimension of the matrix. 
 
-\begin{figure}[H]
+\begin{figure}%[H]
 	\centering
-	\includegraphics[width=18cm]{times.eps}
+	\includegraphics[width=18cm]{times}
 	\caption{Elapsed time during calculation for the various algorithms on a logarithmic grid.}
 	\label{fig:times}
 \end{figure}
 
 In Figure \ref{fig:times} we can notice how a specialized algorithm is indeed able to significantly cut down the time required for the computation of the solution.
 In fact, we can easily notice how, with a standard Gaussian elimination, the required time for solving a $2 \times 10^2$  dimensional matrix is the same it takes for the specialized algorithm to compute $10^6$ points. This yields clearly to a much higher degree of precision and a better deployment of resources.
-As a matter of fact, counting the number of operations contained in the specialised algorithm is $6N$, whereas for the LU decomposition it should amount to $N^2+N^3$. 
+
+As a matter of fact, counting the number of operations contained in the specialised algorithm is $6N$, whereas for the LU decomposition it should amount to $N^2+N^3$. Unfortunately we are unable to appreciate this cubic function, given the scarcity of data, however the slope of the curve is much higher.
+Moreover the 'optimized tridiagonal' is characterized by $8N$ operations and we are able to notice a clear but not overwhelming difference. 
+
+It is also possible to notice how the Gaussian elimination managed to be faster than the Standard LU, this is probably due to the fact that our particular matrix was composed by a really high number of zeroes and armadillo was supposedly able to avoid unnecessary operations among zeroes, thus reducing the computation time.
 
 It is worth compare the ``theoretical'' FLOPS of the specialised algorithm with the real ones. For $N=10^{8}$, the program takes about $1.77\,s$. All of our tests were conducted on a Ubuntu/Linux machine, equipped with a Intel i7-3610QM processor and 8GB of DDR3 memory. On the page \url{http://browser.primatelabs.com/geekbench2/2343311} there is a performance table of the processor, and we see that operating with single-core floating point numbers the processor reaches 1.68 Gflops. Considering that we were operating with double floating point numbers and given the elapsed time, it comes out that the operations performed by our algorithm were $\simeq 15N < 6N$. This can be explained counting \emph{all} of the operations performed during the cycle, included indexes operations and native counter increasing. Counting those operation, we reach $11N$, still below $15N$. The additional discrepancy can be explained taking into account memory access ($4N$ access operations) and interferences caused by the system processes.
 
-
-
 \section{Errors}
-It is now interesting to analyse the error that we do in numerical approximation as a function of the number of points. It is intuitive that, as much as we restrict the step length $h$ (that is the same thing as increasing the number of points) the error gets smaller and smaller. This behaviour is shown if Figure \ref{fig:errors}, where we plotted in a log-log scale the maximum percentage error calculated as
-\begin{equation*}
-	\epsilon_i = \left| \frac{v[i]}{u[i]} - 1 \right|
-\end{equation*}
-($v[i]$ is the numerical solution, $u[i]$ is the analytical one).
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=\textwidth]{errors}
 	\caption{Maximum percentage error of the numerical solution as a function of the number of points.}
 	\label{fig:errors}
-\end{figure} 
+\end{figure}
+
+It is now interesting to analyse the error that we do in numerical approximation as a function of the number of points. It is intuitive that, as much as we restrict the step length $h$ (that is the same thing as increasing the number of points) the error gets smaller and smaller. This behaviour is shown if Figure \ref{fig:errors}, where we plotted in a log-log scale the maximum percentage error calculated as
+\begin{equation*}
+	\epsilon_i = \left| \frac{v[i]}{u[i]} - 1 \right|
+\end{equation*}
+($v[i]$ is the numerical solution, $u[i]$ is the analytical one).
+
 You see that the error lowers until $N = 10^{5}$, then increases again. This a typical example of \emph{loss of precision}; as our numerical solution gets closer to the analytical one, the ratio $v[i]/u[i]$ gets closer to one, and as a result in calculating $\epsilon_i$ we perform a subtraction between two almost identical (in our choice of precision) numbers. This causes a loss in terms of significant digits that explains the behaviour of the plot for big $N$. It is also evident that we get the lowest significant relative error for $N \simeq 10^{6}$. Relative errors for $N > 10^{6}$ are not worth trusting, due to the loss of precision explained above.
 
+\section{Conslusions}
 
+In this project we were able to develop and algorithm to solve a special differential equation using a numerical method but implementing it in various ways, which proved to be diversely capable. We were also able to observe a phenomenon of loss of precision in the computation of errors due to the use of the subtraction. 
 
 \newpage
 \section{C++ Code}
+\label{sec:code}
 
 All the code is stored at \url{https://github.com/matteosecli/Computational_Physics}. Since this is a private repo, you have to request access writing to \href{mailto:mattes@mail.uio.no}{mattes@mail.uio.no}.
 

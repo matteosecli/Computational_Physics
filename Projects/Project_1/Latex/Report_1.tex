@@ -436,7 +436,7 @@ Passage 3:
 \end{array}
 \right)
 \end{equation}
-that is $a_{i,j} \rightarrow \frac{a_{i,j}+(i+1)a_{i+1,j}}{i+2}$ for i going from 0 to (n-1)
+that is $a_{i,j} \rightarrow \frac{a_{i,j}+(i+1)a_{i+1,j}}{i+2}$ for i going from 0 to (n-2)
 \\
 Now it's very simple to solve the system.
 \\
@@ -444,7 +444,7 @@ Now it's very simple to solve the system.
 \\
 MATRIX (n+1)x(n+1)
 
-We focus only on the tridiagonal matrix and try to obtain the unitary matrix; to do this let's to passage 1 until the n+1 row.
+We focus only on the tridiagonal matrix and try to obtain the unitary matrix; to do this let's to passage 1 until the n row.
 
 \begin{equation}
 \left(
@@ -457,20 +457,20 @@ We focus only on the tridiagonal matrix and try to obtain the unitary matrix; to
 \end{array}
 \right)
 \end{equation}
-Now let's do passage 2 on the n+1 row
+Now let's add passage 2 on the n row and passage 3 on the n-1 row
 \begin{equation}
 \left(
 \begin{array}{ccccc}
   2 & -1 & 0 & 0 & \cdots \\
   0 & 3 & -2 & 0 & \cdots \\
   \cdots & \cdots & \cdots & \cdots & \cdots \\
-  \cdots & \cdots & \cdots & n+2 & -(n+1) \\
-  \cdots & \cdots & \cdots & 0 & n+3 \\
+  \cdots & \cdots & \cdots & 1 & 0 \\
+  \cdots & \cdots & \cdots & 0 & 1 \\
 \end{array}
 \right)
 \end{equation}
 
-Now, ignoring the (n+1)-row and the (n+1)-column, we have a nxn matrix which we can bring back to the identity going on with the passage 3.
+Now, ignoring the n-row and the n-column, we have a (n-1)x(n-1) matrix which we can bring back to the identity going on with the passage 3.
 \\
 \\
 \\

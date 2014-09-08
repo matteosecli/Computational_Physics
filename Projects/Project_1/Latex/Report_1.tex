@@ -286,13 +286,68 @@ Translating the above algorithm in C++ language and working only on the vector f
     }
     for (int j = (N-2); j >= 0; j--) u[j] -= gam[j+1]*u[j+1];
 \end{lstlisting}
-
 \subsection{Particular algorithm}
 
+Using the regular Gaussian elimination algorithm we proceed to find a specific solution of our system as follows:
+
+\begin{equation}
+\left(
+\begin{array}{cccccc|c}
+   2 & -1 &  0 & 0 & \cdots & 0 & f_0 \\
+  -1 &  2 & -1 & 0 & \cdots & 0 & f_1 \\
+   0 &-1 &  2 & -1 & \cdots & 0 & f_2\\
+  \vdots  & \vdots  & & \ddots & & \vdots & \vdots  \\
+   0 &  0 & \cdots  & -1 & 2 & -1 & f_{N-2} \\
+   0 &  0 & \cdots & \cdots  & -1 & 2 & f_{N-1} 
+\end{array}	
+\right)
+\longrightarrow
+\left(
+\begin{array}{cccccc|c}
+   2 & -1 &  0 & 0 & \cdots & 0 & f_0 \\
+   0 &  3 & -2 & 0 & \cdots & 0 & 2 f_1+f_0 \\
+   0 & 0 &  4 & -3 & \cdots & 0 & 3 f_2+2 f_1+f_0\\
+  \vdots  & \vdots  & & \ddots & & \vdots & \vdots  \\
+   0 &  0 & \cdots  & 0 & N & -(N-1) &  (N-1) f_{N-2} + \sum_{j=0}^{N-3} (j+1)f_{j}  \\
+   0 &  0 & \cdots & \cdots  & 0 & N+1 &  \sum_{j=0}^{N-1} (j+1)f_{j} 
+\end{array}	
+\right)
+\end{equation}
+
+We therefore know ahead of times the explicit form of the matrix in upper triangular form and are able to compute all the constant terms of the system as follows
+
+$$\tilde{f}_i= \sum_{j=0}^{i}(j+1) f_j$$
+
+However, we don't need to compute the sum every time, since we can compute $\tilde{f}_i$ knowing $\tilde{f}_{i-1}$:
+
+$$\tilde{f}_i=(i+1)f_i+\tilde{f}_{i-1}$$
+
+Once this forward computations are completed, it is possible to proceed with a back substitution, knowing that
+
+$$u_{N-1}=\frac{1}{N+1} \tilde{f}_{N-1}$$
+
+we are able to find the vector of solutions $u_i$
+
+$$u_i=\frac{1}{i+2} (\tilde{f}[i]+ (i+1) u[i+1])$$
+
+Translating the algorithm in C++ code we obtain the following cycle:
+
+\begin{lstlisting}[language=cpp]
+	for (i=1; i!=n; i++) {
+		f[i]=(i+1)*f[i]+f[i-1];
+	}
+	u[n-1]=f[n-1]/(n+1);
+	for (i=n-2; i>=0; i--) {
+		u[i]=(f[i]+(i+1)*u[i+1])/(i+2);
+	}
+\end{lstlisting}
+
+Similarly to the previous code of section 1.2 this algorithm is characterized by 2 for cycles and therefore the time required for the solution increase linearly with the number of points used.
+
+Moreover, this program allows us to use a minimal amount of memory, storing only the vector f and the solution u. 
+
+
 Using the regular Gaussian elimination algorithm we proceed to find a specific solution of our system as follows; we will start form a 3x3 matrix as before, and then demonstrate it for a matrix of optional dimension.
-\\
-\\
-\\
 \\
 \\
 MATRIX 3X3:
@@ -303,7 +358,7 @@ MATRIX 3X3:
    2 & -1 & 0 & f_0 \\
    -1 & 2 & -1 & f_1 \\
    0 & -1 & 2 & f_2 \\
-\end{array}	
+\end{array}    
 \right)
 \longrightarrow
 \end{equation}
@@ -358,19 +413,19 @@ We focus only on the tridiagonal matrix and try to obtain the unitary matrix; to
   0 & 3 & -2 & 0 & \cdots \\
   \cdots & \cdots & \cdots & \cdots & \cdots \\
   \cdots & \cdots & \cdots & n+2 & -(n+1) \\
-  \cdots & \cdots & \cdots & -1 & 2 \\
+  \cdots & \cdots & \cdots & 0 & n+3 \\
 \end{array}
 \right)
 \end{equation}
-and simply subtracting, from the n-row, the (n+1)-row multiplied for bet(n)/c:
+Now let's do passage 2 on the n+1 row
 \begin{equation}
 \left(
 \begin{array}{ccccc}
-  1 & c/b & 0 & 0 & \cdots \\
-  0 & 1 & \frac{c}{b-ac/b} & 0 & \cdots \\
+  2 & -1 & 0 & 0 & \cdots \\
+  0 & 3 & -2 & 0 & \cdots \\
   \cdots & \cdots & \cdots & \cdots & \cdots \\
-  \cdots & \cdots & \cdots & 1 & 0 \\
-  \cdots & \cdots & \cdots & 0 & 1 \\
+  \cdots & \cdots & \cdots & n+2 & -(n+1) \\
+  \cdots & \cdots & \cdots & 0 & n+3 \\
 \end{array}
 \right)
 \end{equation}
@@ -381,16 +436,13 @@ Now, ignoring the (n+1)-row and the (n+1)-column, we have a nxn matrix which we 
 \\
 ALGORITHM IN C++
 
-Translating the above algorithm in C++ language and working only on the vector f and on the solution vector u, we obtain the following code:
+Translating the above algorithm in C++ language and working only on the vector f and on the solution vector u, we obtain the following code (N is the matrix's dimension):
 
 \begin{lstlisting}[language=cpp]
-	u[0]=f[0]/(bet=b);
-    for(int j = 1; j < N; j++) {
-        gam[j]=c/bet;
-        bet=b-a*gam[j];
-        u[j]=(f[j]-a*u[j-1])/bet;
-    }
-    for (int j = (N-2); j >= 0; j--) u[j] -= gam[j+1]*u[j+1];
+    for(int j = 1; j < N; j++) f[j]=(j+1)*f[j]+f[j-1];
+    u[N-1] = f[N-1]/(N+1);
+    int prev_idx = N;
+    for(int j = N - 1; j > 0; j--) {u[j-1]=(f[j-1]+j*u[j])/prev_idx; prev_idx = j;}
 \end{lstlisting}
 
 \subsection{Errors}
@@ -409,6 +461,7 @@ We will now study how the program performs as a function of the dimension of the
 
 In Figure (1) we can notice how a specialized algorithm is indeed able to significantly cut down the time required for the computation of the solution.
 In fact, we can easily notice how, with a standard Gaussian elimination, the required time for solving a $2 \times 10^2$  dimensional matrix is the same it takes for the specialized algorithm to compute $10^6$ points. This yields clearly to a much higher degree of precision and a better deployment of resources.
+As a matter of fact, counting the number of operations contained in the for cycle for the specialised algorithm is 
 
 
 \newpage

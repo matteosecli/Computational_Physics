@@ -483,9 +483,23 @@ Translating the above algorithm in C++ language and working only on the vector f
     u[N-1] = f[N-1]/(N+1);
     int prev_idx = N;
     for(int j = N - 1; j > 0; j--) {u[j-1]=(f[j-1]+j*u[j])/prev_idx; prev_idx = j;}
-\end{lstlisting}+
+\end{lstlisting}
 
 \section{Solution of the differential equation}
+
+Given our differential equation
+
+$$u''(x)=-f(x)$$
+
+it is easy to solve by just integrating the function $f(x)$ and using the boundary condition to determine the value of the two integration constants. Our function is $f(x)=100 e^{-10x}$
+
+$$u'(x)=\int -100 e^{-10x} dx=10 e^{-10 x}+C_1 \quad \quad u(x)= \int u'(x) dx=-e^{-10x}+ C_1 x+ C_2$$
+
+and our boundary conditions are $u(0)=-1+C_2=0$ and $u(1)=-e^{-10}+C_1+C_2=0$. Solving the system we obtain $C_1=e^{-10}-1$, $C_2=1$, which substituted in our family of solutions yields to our analytical solution
+
+$$u(x)=1-(1-e^{-10})x-e^{-10 x}$$
+
+This function will be used to calculate the errors caused by our numerical approximation. In Figure (1) we can see the graph of this function as computed by solving the differential equation. Not much can be said except that the boundary conditions are satisfied.
 
 \begin{figure}[H]
 	\centering

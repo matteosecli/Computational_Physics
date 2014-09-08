@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2014.8.30)  8 SEP 2014 17:30
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2014.8.30)  8 SEP 2014 17:59
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -819,14 +819,14 @@ Package epstopdf Info: Source file: <figures/solution.eps>
 (epstopdf)                    size: 352717 bytes
 (epstopdf)             Command: <repstopdf --outfile=figures/solution-eps-conve
 rted-to.pdf figures/solution.eps>
-(epstopdf)             \includegraphics on input line 492.
+(epstopdf)             \includegraphics on input line 506.
 Package epstopdf Info: Output file is already uptodate.
  <figures/solution-eps-converted-to.pdf, id=103, 518.93875pt x 437.635pt>
 File: figures/solution-eps-converted-to.pdf Graphic file (type pdf)
 
 <use figures/solution-eps-converted-to.pdf>
 Package pdftex.def Info: figures/solution-eps-converted-to.pdf used on input li
-ne 492.
+ne 506.
 (pdftex.def)             Requested size: 284.52756pt x 239.95876pt.
 Package epstopdf Info: Source file: <times.eps>
 (epstopdf)                    date: 2014-09-08 12:03:15
@@ -836,21 +836,21 @@ Package epstopdf Info: Source file: <times.eps>
 (epstopdf)                    size: 10701 bytes
 (epstopdf)             Command: <repstopdf --outfile=times-eps-converted-to.pdf
  times.eps>
-(epstopdf)             \includegraphics on input line 503.
+(epstopdf)             \includegraphics on input line 517.
 Package epstopdf Info: Output file is already uptodate.
 
 <times-eps-converted-to.pdf, id=104, 1096.095pt x 522.95375pt>
 File: times-eps-converted-to.pdf Graphic file (type pdf)
 
 <use times-eps-converted-to.pdf>
-Package pdftex.def Info: times-eps-converted-to.pdf used on input line 503.
+Package pdftex.def Info: times-eps-converted-to.pdf used on input line 517.
 (pdftex.def)             Requested size: 512.1496pt x 244.35196pt.
  [5pdfTeX warning (ext4): destination with the same identifier (name{figure.1})
  has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.506 
+l.520 
        <./figures/solution-eps-converted-to.pdf>]
 Package epstopdf Info: Source file: <figures/errors.eps>
 (epstopdf)                    date: 2014-09-08 16:59:05
@@ -860,7 +860,7 @@ Package epstopdf Info: Source file: <figures/errors.eps>
 (epstopdf)                    size: 9361 bytes
 (epstopdf)             Command: <repstopdf --outfile=figures/errors-eps-convert
 ed-to.pdf figures/errors.eps>
-(epstopdf)             \includegraphics on input line 521.
+(epstopdf)             \includegraphics on input line 535.
 Package epstopdf Info: Output file is already uptodate.
 
 <figures/errors-eps-converted-to.pdf, id=121, 1096.095pt x 554.07pt>
@@ -868,32 +868,32 @@ File: figures/errors-eps-converted-to.pdf Graphic file (type pdf)
 
 <use figures/errors-eps-converted-to.pdf>
 Package pdftex.def Info: figures/errors-eps-converted-to.pdf used on input line
- 521.
+ 535.
 (pdftex.def)             Requested size: 512.14963pt x 258.89114pt.
  [6pdfTeX warning (ext4): destination with the same identifier (name{figure.2})
  has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.525 Y
+l.539 Y
        ou see that the error lowers until $N = 10^{5}$, then increases again...
  <./times-eps-converted-to.pdf>] [7pdfTeX warning (ext4): destination with the 
 same identifier (name{figure.3}) has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.529 \newpage
+l.543 \newpage
                <./figures/errors-eps-converted-to.pdf>] [8] [9]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 731.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 745.
  [10]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 731.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 745.
 
 (./Report_1.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 731.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 731.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 745.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 745.
 Package rerunfilecheck Info: File `Report_1.out' has not changed.
 (rerunfilecheck)             Checksum: 1FC2F487740449A77F8C4AD2193F15A2;1351.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 731.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 745.
  ) 
 Here is how much of TeX's memory you used:
  13752 strings out of 494985
@@ -919,7 +919,7 @@ re/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/share/texl
 ive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/share/texlive/te
 xmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/share/texlive/texmf-di
 st/fonts/type1/public/amsfonts/cm/cmtt8.pfb>
-Output written on Report_1.pdf (10 pages, 599191 bytes).
+Output written on Report_1.pdf (10 pages, 601336 bytes).
 PDF statistics:
  469 PDF objects out of 1000 (max. 8388607)
  429 compressed objects within 5 object streams

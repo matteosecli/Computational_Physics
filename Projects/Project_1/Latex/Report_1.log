@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2014.8.30)  8 SEP 2014 17:18
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2014.8.30)  8 SEP 2014 17:20
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -605,11 +605,7 @@ Package: geometry 2010/09/12 v5.6 Page Geometry
 \Gm@layouthoffset=\dimen134
 \Gm@layoutvoffset=\dimen135
 \Gm@dimlist=\toks28
-) (./Report_1.aux
-
-LaTeX Warning: Label `fig:errors' multiply defined.
-
-)
+) (./Report_1.aux)
 \openout1 = `Report_1.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 106.
@@ -897,16 +893,12 @@ Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 731.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 731.
 Package rerunfilecheck Info: File `Report_1.out' has not changed.
 (rerunfilecheck)             Checksum: 1FC2F487740449A77F8C4AD2193F15A2;1351.
-
-
-LaTeX Warning: There were multiply-defined labels.
-
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 731.
  ) 
 Here is how much of TeX's memory you used:
  13751 strings out of 494985
  186119 string characters out of 6180356
- 717191 words of memory out of 5000000
+ 717284 words of memory out of 5000000
  16558 multiletter control sequences out of 15000+600000
  12483 words of font info for 49 fonts, out of 8000000 for 9000
  36 hyphenation exceptions out of 8191
@@ -927,7 +919,7 @@ re/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/share/texl
 ive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/share/texlive/te
 xmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/share/texlive/texmf-di
 st/fonts/type1/public/amsfonts/cm/cmtt8.pfb>
-Output written on Report_1.pdf (9 pages, 598510 bytes).
+Output written on Report_1.pdf (9 pages, 598508 bytes).
 PDF statistics:
  465 PDF objects out of 1000 (max. 8388607)
  426 compressed objects within 5 object streams

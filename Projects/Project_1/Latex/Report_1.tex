@@ -137,7 +137,7 @@ Using Taylor expansion it is possible to express the second derivative of a func
 	u''(x)= \frac{u(x-h)-2 u(x)+u(x+h)}{h^2}+ \O (h^2)
 \end{equation}
 
-We are therefore able to discretize equaition (\ref{differential_eq}) using $N$ points, obtaining:
+We are therefore able to discretize equation (\ref{differential_eq}) using $N$ points, obtaining:
 
 $$u''_i= \frac{u_{i-1}-2 u_i+u_{i+1}}{h^2}=-f_i \quad \quad i \in \left\lbrace 1 \cdots N\right\rbrace$$
 
@@ -499,12 +499,13 @@ Translating the above algorithm in C++ language and working only on the vector f
 We will now study how the program performs as a function of the dimension of the matrix. 
 
 \begin{figure}[ht]
- \centering
-   {\includegraphics[width=18cm]{times.eps}}
- \caption{Elapsed time during calculation for the various algorithms on a logarithmic grid.}
+	\centering
+	\includegraphics[width=18cm]{times.eps}
+	\caption{Elapsed time during calculation for the various algorithms on a logarithmic grid.}
+	\label{fig:times}
 \end{figure}
 
-In Figure (2) we can notice how a specialized algorithm is indeed able to significantly cut down the time required for the computation of the solution.
+In Figure \ref{fig:times} we can notice how a specialized algorithm is indeed able to significantly cut down the time required for the computation of the solution.
 In fact, we can easily notice how, with a standard Gaussian elimination, the required time for solving a $2 \times 10^2$  dimensional matrix is the same it takes for the specialized algorithm to compute $10^6$ points. This yields clearly to a much higher degree of precision and a better deployment of resources.
 As a matter of fact, counting the number of operations contained in the specialised algorithm is $8N$, whereas for the LU decomposition it should amount to $N^2+N^3$. 
 

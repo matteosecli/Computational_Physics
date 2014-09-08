@@ -137,7 +137,7 @@ Using Taylor expansion it is possible to express the second derivative of a func
 	u''(x)= \frac{u(x-h)-2 u(x)+u(x+h)}{h^2}+ \O (h^2)
 \end{equation}
 
-We are therefore able to discretize equaition (\ref{differential_eq}) using $N$ points, obtaining:
+We are therefore able to discretize equation (\ref{differential_eq}) using $N$ points, obtaining:
 
 $$u''_i= \frac{u_{i-1}-2 u_i+u_{i+1}}{h^2}=-f_i \quad \quad i \in \left\lbrace 1 \cdots N\right\rbrace$$
 
@@ -173,9 +173,8 @@ Using the matrix representation, we can write equation (\ref{differential_eq}) a
 
 Note how, with this system it is already implied that $f(0)=0$ e $f(L)=0$, since the first and last equations state that
 
-$$h^2 f_0=\frac{2 u_0-u_1}{h^2}=\frac{-1 u_{-1}+2 u_0-u_1}{h^2}$$
-
-$$h^2 f_{N-1}=\frac{-u_{N-2}+2 u_{N-1}}{h^2}=\frac{-u_{N-2}+2 u_{N-1}-u_N}{h^2}$$ 
+$$h^2 f_0 = 2 u_0-u_1 = -1 u_{-1}+2 u_0-u_1$$
+$$h^2 f_{N-1} = -u_{N-2}+2 u_{N-1} =  -u_{N-2}+2 u_{N-1}-u_N$$ 
 
 Since the boundary conditions of the differential equations state that $u_{-1}=u(0)=0$ and $u_{N}=u(L)=0$.  
 

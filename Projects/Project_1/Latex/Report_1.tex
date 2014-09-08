@@ -282,7 +282,7 @@ Before starting to demonstrate that the above passages can be done also for a (n
 
 $$A_{N-1,N}=\frac{c}{bet(N-1)}$$
 where 
-$$bet(n)=b_0-\frac{ac}{b_1-\frac{ac}{b_2-\frac{ac}{\frac{\cdots}{b_{n-1}-\frac{ac}{b_n}}}}}$$
+$$bet(n)=b_0-\dfrac{ac}{b_1-\dfrac{ac}{b_2-\dfrac{ac}{\dfrac{\cdots}{b_{n-1}-\dfrac{ac}{b_n}}}}}$$
 (here all the $b_i's$ have the same value; the index i helps only to count them).
 
 Now we do the passage 2 until the last row (we focus only on the tridiagonal matrix; if we manage to obtain the unitary matrix the system is solved); we obtain:
@@ -291,7 +291,7 @@ Now we do the passage 2 until the last row (we focus only on the tridiagonal mat
 \left(
 \begin{array}{ccccc}
   1 & c/b & 0 & 0 & \cdots \\
-  0 & 1 & fract{c}{b-ac/b} & 0 & \cdots \\
+  0 & 1 & \frac{c}{b-ac/b} & 0 & \cdots \\
   \cdots & \cdots & \cdots & \cdots & \cdots \\
   \cdots & \cdots & \cdots & 1 & c/bet(n) \\
   \cdots & \cdots & \cdots & 0 & 1 \\
@@ -328,66 +328,6 @@ Translating the above algorithm in C++ language and working only on the vector f
     }
     for (int j = (N-2); j >= 0; j--) u[j] -= gam[j+1]*u[j+1];
 \end{lstlisting}
-\subsection{Particular algorithm}
-
-Using the regular Gaussian elimination algorithm we proceed to find a specific solution of our system as follows:
-
-\begin{equation}
-\left(
-\begin{array}{cccccc|c}
-   2 & -1 &  0 & 0 & \cdots & 0 & f_0 \\
-  -1 &  2 & -1 & 0 & \cdots & 0 & f_1 \\
-   0 &-1 &  2 & -1 & \cdots & 0 & f_2\\
-  \vdots  & \vdots  & & \ddots & & \vdots & \vdots  \\
-   0 &  0 & \cdots  & -1 & 2 & -1 & f_{N-2} \\
-   0 &  0 & \cdots & \cdots  & -1 & 2 & f_{N-1} 
-\end{array}	
-\right)
-\longrightarrow
-\left(
-\begin{array}{cccccc|c}
-   2 & -1 &  0 & 0 & \cdots & 0 & f_0 \\
-   0 &  3 & -2 & 0 & \cdots & 0 & 2 f_1+f_0 \\
-   0 & 0 &  4 & -3 & \cdots & 0 & 3 f_2+2 f_1+f_0\\
-  \vdots  & \vdots  & & \ddots & & \vdots & \vdots  \\
-   0 &  0 & \cdots  & 0 & N & -(N-1) &  (N-1) f_{N-2} + \sum_{j=0}^{N-3} (j+1)f_{j}  \\
-   0 &  0 & \cdots & \cdots  & 0 & N+1 &  \sum_{j=0}^{N-1} (j+1)f_{j} 
-\end{array}	
-\right)
-\end{equation}
-
-We therefore know ahead of times the explicit form of the matrix in upper triangular form and are able to compute all the constant terms of the system as follows
-
-$$\tilde{f}_i= \sum_{j=0}^{i}(j+1) f_j$$
-
-However, we don't need to compute the sum every time, since we can compute $\tilde{f}_i$ knowing $\tilde{f}_{i-1}$:
-
-$$\tilde{f}_i=(i+1)f_i+\tilde{f}_{i-1}$$
-
-Once this forward computations are completed, it is possible to proceed with a back substitution, knowing that
-
-$$u_{N-1}=\frac{1}{N+1} \tilde{f}_{N-1}$$
-
-we are able to find the vector of solutions $u_i$
-
-$$u_i=\frac{1}{i+2} (\tilde{f}[i]+ (i+1) u[i+1])$$
-
-Translating the algorithm in C++ code we obtain the following cycle:
-
-\begin{lstlisting}[language=cpp]
-	for (i=1; i!=n; i++) {
-		f[i]=(i+1)*f[i]+f[i-1];
-	}
-	u[n-1]=f[n-1]/(n+1);
-	for (i=n-2; i>=0; i--) {
-		u[i]=(f[i]+(i+1)*u[i+1])/(i+2);
-	}
-\end{lstlisting}
-
-Similarly to the previous code of section 1.2 this algorithm is characterized by 2 for cycles and therefore the time required for the solution increase linearly with the number of points used.
-
-Moreover, this program allows us to use a minimal amount of memory, storing only the vector f and the solution u. 
-
 
 \subsection{Particular algorithm}
 
@@ -545,7 +485,28 @@ Translating the above algorithm in C++ language and working only on the vector f
     for(int j = N - 1; j > 0; j--) {u[j-1]=(f[j-1]+j*u[j])/prev_idx; prev_idx = j;}
 \end{lstlisting}+
 
+\section{Solution of the differential equation}
 
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=10cm]{solution}
+	\caption{Graph of the solution of the differential equation, computed with $10^4$ points, using the special algorithm.}
+	\label{fig:solution}
+\end{figure} 
+
+\section{Time}
+
+We will now study how the program performs as a function of the dimension of the matrix. 
+
+\begin{figure}[ht]
+ \centering
+   {\includegraphics[width=18cm]{times.eps}}
+ \caption{Elapsed time during calculation for the various algorithms on a logarithmic grid.}
+\end{figure}
+
+In Figure (2) we can notice how a specialized algorithm is indeed able to significantly cut down the time required for the computation of the solution.
+In fact, we can easily notice how, with a standard Gaussian elimination, the required time for solving a $2 \times 10^2$  dimensional matrix is the same it takes for the specialized algorithm to compute $10^6$ points. This yields clearly to a much higher degree of precision and a better deployment of resources.
+As a matter of fact, counting the number of operations contained in the specialised algorithm is $8N$, whereas for the LU decomposition it should amount to $N^2+N^3$. 
 
 
 
@@ -563,22 +524,6 @@ It is now interesting to analyse the error that we do in numerical approximation
 \end{figure} 
 You see that the error lowers until $N = 10^{5}$, then increases again. This a typical example of \emph{loss of precision}; as our numerical solution gets closer to the analytical one, the ratio $v[i]/u[i]$ gets closer to one, and as a result in calculating $\epsilon_i$ we perform a subtraction between two almost identical (in our choice of precision) numbers. This causes a loss in terms of significant digits that explains the behaviour of the plot for big $N$. It is also evident that we get the lowest significant relative error for $N \simeq 10^{6}$. Relative errors for $N > 10^{6}$ are not worth trusting, due to the loss of precision explained above.
 
-
-
-
-\section{Time}
-
-We will now study how the program performs as a function of the dimension of the matrix. 
-
-\begin{figure}[ht]
- \centering
-   {\includegraphics[width=18cm]{times.eps}}
- \caption{Elapsed time during calculation for the various algorithms on a logarithmic grid.}
-\end{figure}
-
-In Figure (1) we can notice how a specialized algorithm is indeed able to significantly cut down the time required for the computation of the solution.
-In fact, we can easily notice how, with a standard Gaussian elimination, the required time for solving a $2 \times 10^2$  dimensional matrix is the same it takes for the specialized algorithm to compute $10^6$ points. This yields clearly to a much higher degree of precision and a better deployment of resources.
-As a matter of fact, counting the number of operations contained in the specialised algorithm is $8N$, whereas for the Gaussian elimination it should amount to $\frac{1}{3} N^3$. 
 
 
 \newpage

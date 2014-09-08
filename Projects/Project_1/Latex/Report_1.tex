@@ -261,10 +261,10 @@ We will describe the algorithm we used for this system first for a $3\times3$ tr
 
 \item $(n+1) \times (n+1)$ matrix.
 
-	Before starting to demonstrate that the above passages can be done also for a $(n+1) \times (n+1)$ matrix, supposed that they work for a $n \times n$ one, we can notice that, in general, for a square matrix of optional dimension $N$, doing the passage 2 until the penultimate row we obtain:
-	$$A_{N-1,N}=\frac{c}{bet(N-1)}$$
-	where 
-	$$bet(n)=b_0-\dfrac{ac}{b_1-\dfrac{ac}{b_2-\dfrac{ac}{\dfrac{\cdots}{b_{n-1}-\dfrac{ac}{b_n}}}}}$$
+	Before starting to demonstrate that the above passages can be done also for a $(n+1) \times (n+1)$ matrix, supposed that they work for a $n \times n$ one, we can notice that, in general, for a square matrix of optional dimension $n$, doing the passage 2 until the penultimate row we obtain:
+	$$A_{n-2,n-1}=\frac{c}{bet(n-2)}$$
+	(we are using the convention according to with the indexes start from $0$, so the last row and column are labelled $n-1$) where 
+	$$bet(m)=b_0-\dfrac{ac}{b_1-\dfrac{ac}{b_2-\dfrac{ac}{\dfrac{\cdots}{b_{m-1}-\dfrac{ac}{b_m}}}}}$$
 	(here all the $b_i's$ have the same value; the index i helps only to count them).
 	
 	Now we do the passage 2 until the last row (we focus only on the tridiagonal matrix; if we manage to obtain the unitary matrix the system is solved); we obtain:
@@ -274,12 +274,12 @@ We will describe the algorithm we used for this system first for a $3\times3$ tr
 	  1 & c/b & 0 & 0 & \cdots \\
 	  0 & 1 & \frac{c}{b-ac/b} & 0 & \cdots \\
 	  \cdots & \cdots & \cdots & \cdots & \cdots \\
-	  \cdots & \cdots & \cdots & 1 & c/bet(n) \\
+	  \cdots & \cdots & \cdots & 1 & c/bet(n-1) \\
 	  \cdots & \cdots & \cdots & 0 & 1 \\
 	\end{array}
 	\right)
 	\end{equation}
-	and simply subtracting, from the n-row, the (n+1)-row multiplied for bet(n)/c:
+	and simply subtracting, from the ($n-1$)-row, the $n$-row multiplied for $c/bet(n-1)$:
 	\begin{equation}
 	\left(
 	\begin{array}{ccccc}
@@ -291,7 +291,7 @@ We will describe the algorithm we used for this system first for a $3\times3$ tr
 	\end{array}
 	\right)
 	\end{equation}
-	Now, ignoring the (n+1)-row and the (n+1)-column, we have a nxn matrix which we can bring back to the identity going on with the passage 3.
+	Now, ignoring the n-row and the $n$-column, we have a $n \times n$ matrix (note again that the indexes start from $0$) which we can bring back to the identity going on with the passage 3.
 
 \item Algorithm in C++
 

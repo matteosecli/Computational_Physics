@@ -491,18 +491,12 @@ We have also computed the solution using other algorithms, namely the LU decompo
 \section{Solution of the differential equation}
 
 Given our differential equation
-
 $$u''(x)=-f(x)$$
-
 it is easy to solve by just integrating the function $f(x)$ and using the boundary condition to determine the value of the two integration constants. Our function is $f(x)=100 e^{-10x}$
-
 $$u'(x)=\int -100 e^{-10x} dx=10 e^{-10 x}+C_1 \quad \quad u(x)= \int u'(x) dx=-e^{-10x}+ C_1 x+ C_2$$
-
 and our boundary conditions are $u(0)=-1+C_2=0$ and $u(1)=-e^{-10}+C_1+C_2=0$. Solving the system we obtain $C_1=e^{-10}-1$, $C_2=1$, which substituted in our family of solutions yields to our analytical solution
-
 $$u(x)=1-(1-e^{-10})x-e^{-10 x}$$
-
-This function will be used to calculate the errors caused by our numerical approximation. In Figure (1) we can see the graph of this function as computed by solving the differential equation. Not much can be said except that the boundary conditions are satisfied.
+This function will be used to calculate the errors caused by our numerical approximation. In Figure \ref{fig:solution} we can see the graph of this function as computed by solving the differential equation. Not much can be said except that the boundary conditions are satisfied.
 
 \begin{figure}[H]
 	\centering
@@ -516,15 +510,18 @@ This function will be used to calculate the errors caused by our numerical appro
 We will now study how the program performs as a function of the dimension of the matrix. 
 
 \begin{figure}[H]
- \centering
-   {\includegraphics[width=18cm]{times.eps}}
- \caption{Elapsed time during calculation for the various algorithms on a logarithmic grid.}
+	\centering
+	\includegraphics[width=18cm]{times.eps}
+	\caption{Elapsed time during calculation for the various algorithms on a logarithmic grid.}
+	\label{fig:times}
 \end{figure}
 
-In Figure (2) we can notice how a specialized algorithm is indeed able to significantly cut down the time required for the computation of the solution.
+In Figure \ref{fig:times} we can notice how a specialized algorithm is indeed able to significantly cut down the time required for the computation of the solution.
 In fact, we can easily notice how, with a standard Gaussian elimination, the required time for solving a $2 \times 10^2$  dimensional matrix is the same it takes for the specialized algorithm to compute $10^6$ points. This yields clearly to a much higher degree of precision and a better deployment of resources.
-As a matter of fact, counting the number of operations contained in the specialised algorithm is $8N$, whereas for the LU decomposition it should amount to $N^2+N^3$. 
+As a matter of fact, counting the number of operations contained in the specialised algorithm is $8N$, whereas for the LU decomposition it should amount to $N^2+N^3$. Unfortunately we are unable to appreciate this cubic function, given the scarcity of data, however the slope of the curve is much higher.
+Moreover both the 'special algorithm' and the 'optimized tridiagonal' are composed by $8N$, however there is a clear but not overwhelming difference. 
 
+It is also possible to notice how the Gaussian elimination managed to be faster than the Standard LU, this is probably due to the fact that our particular matrix was composed by a really high number of zeroes and armadillo was supposedly able to avoid unnecessary operations among zeroes, thus reducing the computation time.
 
 
 \section{Errors}
@@ -541,7 +538,9 @@ It is now interesting to analyse the error that we do in numerical approximation
 \end{figure} 
 You see that the error lowers until $N = 10^{5}$, then increases again. This a typical example of \emph{loss of precision}; as our numerical solution gets closer to the analytical one, the ratio $v[i]/u[i]$ gets closer to one, and as a result in calculating $\epsilon_i$ we perform a subtraction between two almost identical (in our choice of precision) numbers. This causes a loss in terms of significant digits that explains the behaviour of the plot for big $N$. It is also evident that we get the lowest significant relative error for $N \simeq 10^{6}$. Relative errors for $N > 10^{6}$ are not worth trusting, due to the loss of precision explained above.
 
+\section{Conslusions}
 
+In this project we were able to develop and algorithm to solve a special differential equation using a numerical method but implementing it in various ways, which proved to be diversely capable. We were also able to observe a phenomenon of loss of precision in the computation of errors due to the use of the subtraction. 
 
 \newpage
 \section{C++ Code}

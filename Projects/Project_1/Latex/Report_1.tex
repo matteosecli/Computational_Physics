@@ -10,11 +10,30 @@
 \usepackage[utf8]{inputenc}
 \usepackage{fontenc}
 \usepackage[english]{babel}
+\usepackage[%hypertex,
+                 unicode=true,
+                 plainpages = false, 
+                 pdfpagelabels, 
+                 bookmarks=true,
+                 bookmarksnumbered=true,
+                 bookmarksopen=true,
+                 breaklinks=true,
+                 backref=false,
+                 colorlinks=true,
+                 linkcolor = blue,		% Use "blue" if you want to highlight them
+                 urlcolor  = blue,
+                 citecolor = red,
+                 anchorcolor = green,
+                 hyperindex = true,
+                 linktocpage = true,
+                 hyperfigures
+]{hyperref}
 \usepackage{graphicx}
 \usepackage{float}
 \usepackage{fancyhdr}
 \usepackage{listingsutf8}
 \usepackage{xcolor}
+\graphicspath{{figures/PNG/}{figures/PDF/}{figures/}}
 \usepackage{amsfonts}
 \usepackage{amsmath}
 \usepackage{amssymb}	
@@ -73,13 +92,36 @@
       title=\lstname,                 
     }
 
+\author{
+%\textbf{\normalsize Gruppo A6:}\\
+\normalsize Daniele Brugnara \texttt{$<$\href{mailto:daniebru@mail.uio.no}
+{daniebru@mail.uio.no}$>$}\\
+\normalsize Martina Cammilli \texttt{$<$\href{mailto:martinacam@mail.uio.no}
+{martinacam@mail.uio.no}$>$}\\
+\normalsize Matteo Seclì \texttt{$<$\href{mailto:mattes@mail.uio.no}
+{mattes@mail.uio.no}$>$}
+}
+\title{\textbf{Project 1: numerically solving a differential equation through a linear system}}
+
 \begin{document}
 
-\section{\LARGE Numerically solving a differential equation through a linear system}
+\maketitle
 
-\subsection{Abstract}
+\hrule
+%\medskip
+\begin{center}
+	\large\textbf{Abstract}
+	\medskip\\
+	\begin{minipage}[c][][c]{0.8\textwidth}
+		\small{
+			In this project we aim to solve a special kind of differential equation using a numerical procedure that allows us to express the equation through a linear system. We will study some algorithms to solve such a problem, focusing on the efficiency of the program, setting our goal more on speed than generality.
+			}
+	\end{minipage}
+\end{center}
+\medskip
+\hrule
 
-In this project we aim to solve a special kind of differential equation using a numerical procedure that allows us to express the equation through a linear system. We will study some algorithms to solve such a problem, focusing on the efficiency of the program, setting our goal more on speed than generality. 
+\section{Introduction}
 
 The differential equation we're interested in studying is of the type
 
@@ -139,7 +181,7 @@ Since the boundary conditions of the differential equations state that $u_{-1}=u
 
 This linear system is indeed very particular and has a clear pattern. We will first focus on finding a solving algorithm for a general tridiagonal matrix and after we will try to implement another program to solve this particular system with the intent of lowering the number of calculation and therefore the computation time.
 
-\subsection{General algorithm for solving a tridiagonal matrix through back and forward substitution}
+\section{General algorithm for solving a tridiagonal matrix through back and forward substitution}
 
 A general tridiagonal system can be expressed as
 
@@ -350,6 +392,23 @@ Moreover, this program allows us to use a minimal amount of memory, storing only
 
 We will now prove by induction con the dimension of the matrix the validity of the algorithm. We will first prove it for a matrix of $3 \times 3$ dimension and then prove that given  
 
-\subsection{Errors}
+
+
+
+
+\section{Errors}
+It is now interesting to analyse the error that we do in numerical approximation as a function of the number of points. It is intuitive that, as much as we restrict the step length $h$ (that is the same thing as increasing the number of points) the error gets smaller and smaller. This behaviour is shown if Figure \ref{fig:errors}, where we plotted in a log-log scale the maximum percentage error calculated as
+\begin{equation*}
+	\epsilon_i = \left| \frac{v[i]}{u[i]} - 1 \right|
+\end{equation*}
+($v[i]$ is the numerical solution, $u[i]$ is the analytical one).
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\textwidth]{errors}
+	\caption{Maximum percentage error of the numerical solution as a function of the number of points.}
+	\label{fig:errors}
+\end{figure} 
+You see that the error lowers until $N = 10^{5}$, then increases again. This a typical example of \emph{loss of precision}; as our numerical solution gets closer to the analytical one, the ratio $v[i]/u[i]$ gets closer to one, and as a result in calculating $\epsilon_i$ we perform a subtraction between two almost identical (in our choice of precision) numbers. This causes a loss in terms of significant digits that explains the behaviour of the plot for big $N$. It is also evident that we get the lowest significant relative error for $N \simeq 10^{6}$. Relative errors for $N > 10^{6}$ are not worth trusting, due to the loss of precision explained above.
+
 
 \end{document}

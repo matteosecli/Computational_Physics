@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2014.8.30)  8 SEP 2014 18:06
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2014.8.30)  8 SEP 2014 18:18
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -821,7 +821,7 @@ Package epstopdf Info: Source file: <figures/solution.eps>
 rted-to.pdf figures/solution.eps>
 (epstopdf)             \includegraphics on input line 509.
 Package epstopdf Info: Output file is already uptodate.
- <figures/solution-eps-converted-to.pdf, id=103, 518.93875pt x 437.635pt>
+ <figures/solution-eps-converted-to.pdf, id=107, 518.93875pt x 437.635pt>
 File: figures/solution-eps-converted-to.pdf Graphic file (type pdf)
 
 <use figures/solution-eps-converted-to.pdf>
@@ -839,7 +839,7 @@ Package epstopdf Info: Source file: <times.eps>
 (epstopdf)             \includegraphics on input line 520.
 Package epstopdf Info: Output file is already uptodate.
 
-<times-eps-converted-to.pdf, id=104, 1096.095pt x 522.95375pt>
+<times-eps-converted-to.pdf, id=108, 1096.095pt x 522.95375pt>
 File: times-eps-converted-to.pdf Graphic file (type pdf)
 
 <use times-eps-converted-to.pdf>
@@ -863,7 +863,7 @@ ed-to.pdf figures/errors.eps>
 (epstopdf)             \includegraphics on input line 538.
 Package epstopdf Info: Output file is already uptodate.
 
-<figures/errors-eps-converted-to.pdf, id=122, 1096.095pt x 554.07pt>
+<figures/errors-eps-converted-to.pdf, id=125, 1096.095pt x 554.07pt>
 File: figures/errors-eps-converted-to.pdf Graphic file (type pdf)
 
 <use figures/errors-eps-converted-to.pdf>
@@ -891,22 +891,15 @@ Package atveryend Info: Empty hook `AfterLastShipout' on input line 748.
 (./Report_1.aux)
 Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 748.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 748.
-
-
-Package rerunfilecheck Warning: File `Report_1.out' has changed.
-(rerunfilecheck)                Rerun to get outlines right
-(rerunfilecheck)                or use package `bookmark'.
-
-Package rerunfilecheck Info: Checksums for `Report_1.out':
-(rerunfilecheck)             Before: 1FC2F487740449A77F8C4AD2193F15A2;1351
-(rerunfilecheck)             After:  B780AAB1D524A827BB9F6DC7D8358E1B;1517.
+Package rerunfilecheck Info: File `Report_1.out' has not changed.
+(rerunfilecheck)             Checksum: B780AAB1D524A827BB9F6DC7D8358E1B;1517.
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 748.
  ) 
 Here is how much of TeX's memory you used:
- 13753 strings out of 494985
- 186142 string characters out of 6180356
+ 13754 strings out of 494985
+ 186160 string characters out of 6180356
  717284 words of memory out of 5000000
- 16558 multiletter control sequences out of 15000+600000
+ 16559 multiletter control sequences out of 15000+600000
  12483 words of font info for 49 fonts, out of 8000000 for 9000
  36 hyphenation exceptions out of 8191
  40i,12n,69p,695b,1960s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -926,10 +919,10 @@ re/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/share/texl
 ive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/share/texlive/te
 xmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/share/texlive/texmf-di
 st/fonts/type1/public/amsfonts/cm/cmtt8.pfb>
-Output written on Report_1.pdf (10 pages, 602105 bytes).
+Output written on Report_1.pdf (10 pages, 602227 bytes).
 PDF statistics:
- 470 PDF objects out of 1000 (max. 8388607)
- 430 compressed objects within 5 object streams
+ 473 PDF objects out of 1000 (max. 8388607)
+ 433 compressed objects within 5 object streams
  257 named destinations out of 1000 (max. 500000)
- 72 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 80 words of extra memory for PDF output out of 10000 (max. 10000000)
 

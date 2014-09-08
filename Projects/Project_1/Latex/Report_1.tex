@@ -394,7 +394,9 @@ We will now study how the program performs as a function of the dimension of the
 
 In Figure \ref{fig:times} we can notice how a specialized algorithm is indeed able to significantly cut down the time required for the computation of the solution.
 In fact, we can easily notice how, with a standard Gaussian elimination, the required time for solving a $2 \times 10^2$  dimensional matrix is the same it takes for the specialized algorithm to compute $10^6$ points. This yields clearly to a much higher degree of precision and a better deployment of resources.
-As a matter of fact, counting the number of operations contained in the specialised algorithm is $8N$, whereas for the LU decomposition it should amount to $N^2+N^3$. 
+As a matter of fact, counting the number of operations contained in the specialised algorithm is $6N$, whereas for the LU decomposition it should amount to $N^2+N^3$. 
+
+It is worth compare the ``theoretical'' FLOPS of the specialised algorithm with the real ones. For $N=10^{8}$, the program takes about $1.77\,s$. All of our tests were conducted on a Ubuntu/Linux machine, equipped with a Intel i7-3610QM processor and 8GB of DDR3 memory. On the page \url{http://browser.primatelabs.com/geekbench2/2343311} there is a performance table of the processor, and we see that operating with single-core floating point numbers the processor reaches 1.68 Gflops. Considering that we were operating with double floating point numbers and given the elapsed time, it comes out that the operations performed by our algorithm were $\simeq 15N < 6N$. This can be explained counting \emph{all} of the operations performed during the cycle, included indexes operations and native counter increasing. Counting those operation, we reach $11N$, still below $15N$. The additional discrepancy can be explained taking into account memory access ($4N$ access operations) and interferences caused by the system processes.
 
 
 
@@ -416,6 +418,8 @@ You see that the error lowers until $N = 10^{5}$, then increases again. This a t
 
 \newpage
 \section{C++ Code}
+
+All the code is stored at \url{https://github.com/matteosecli/Computational_Physics}. Since this is a private repo, you have to request access writing to \href{mailto:mattes@mail.uio.no}{mattes@mail.uio.no}.
 
 \begin{lstlisting} [language=cpp]
 #include <iostream>

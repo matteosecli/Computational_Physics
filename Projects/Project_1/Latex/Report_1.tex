@@ -485,6 +485,9 @@ Translating the above algorithm in C++ language and working only on the vector f
     for(int j = N - 1; j > 0; j--) {u[j-1]=(f[j-1]+j*u[j])/prev_idx; prev_idx = j;}
 \end{lstlisting}
 
+\subsection{Other algorithms}
+We have also computed the solution using other algorithms, namely the LU decomposition and the standard Gaussian elimination. Both of these apply to general matrices and therefore are expected to perform not as well as the other ones. We will observe such differences in the next paragraph, when we will compare the different elapsed times. For this algorithms we took advantage of an external library, armadillo, as can be see in the script in section 6.
+
 \section{Solution of the differential equation}
 
 Given our differential equation

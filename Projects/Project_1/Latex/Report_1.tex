@@ -420,7 +420,7 @@ It is now interesting to analyse the error that we do in numerical approximation
 
 You see that the error lowers until $N = 10^{5}$, then increases again. This a typical example of \emph{loss of precision}; as our numerical solution gets closer to the analytical one, the ratio $v[i]/u[i]$ gets closer to one, and as a result in calculating $\epsilon_i$ we perform a subtraction between two almost identical (in our choice of precision) numbers. This causes a loss in terms of significant digits that explains the behaviour of the plot for big $N$. It is also evident that we get the lowest significant relative error for $N \simeq 10^{6}$. Relative errors for $N > 10^{6}$ are not worth trusting, due to the loss of precision explained above.
 
-\section{Conslusions}
+\section{Conclusions}
 
 In this project we were able to develop and algorithm to solve a special differential equation using a numerical method but implementing it in various ways, which proved to be diversely capable. We were also able to observe a phenomenon of loss of precision in the computation of errors due to the use of the subtraction. 
 

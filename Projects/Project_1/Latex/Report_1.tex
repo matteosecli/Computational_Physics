@@ -367,18 +367,12 @@ Note that in the code provided here the indexes are shifted in order to reach a 
 \section{Solution of the differential equation}
 
 Given our differential equation
-
 $$u''(x)=-f(x)$$
-
 it is easy to solve by just integrating the function $f(x)$ and using the boundary condition to determine the value of the two integration constants. Our function is $f(x)=100 e^{-10x}$
-
 $$u'(x)=\int -100 e^{-10x} dx=10 e^{-10 x}+C_1 \quad \quad u(x)= \int u'(x) dx=-e^{-10x}+ C_1 x+ C_2$$
-
 and our boundary conditions are $u(0)=-1+C_2=0$ and $u(1)=-e^{-10}+C_1+C_2=0$. Solving the system we obtain $C_1=e^{-10}-1$, $C_2=1$, which substituted in our family of solutions yields to our analytical solution
-
 $$u(x)=1-(1-e^{-10})x-e^{-10 x}$$
-
-This function will be used to calculate the errors caused by our numerical approximation. In Figure (1) we can see the graph of this function as computed by solving the differential equation. Not much can be said except that the boundary conditions are satisfied.
+This function will be used to calculate the errors caused by our numerical approximation. In Figure \ref{fig:solution} we can see the graph of this function as computed by solving the differential equation. Not much can be said except that the boundary conditions are satisfied.
 
 \begin{figure}[H]
 	\centering
@@ -392,12 +386,13 @@ This function will be used to calculate the errors caused by our numerical appro
 We will now study how the program performs as a function of the dimension of the matrix. 
 
 \begin{figure}[H]
- \centering
-   {\includegraphics[width=18cm]{times.eps}}
- \caption{Elapsed time during calculation for the various algorithms on a logarithmic grid.}
+	\centering
+	\includegraphics[width=18cm]{times.eps}
+	\caption{Elapsed time during calculation for the various algorithms on a logarithmic grid.}
+	\label{fig:times}
 \end{figure}
 
-In Figure (2) we can notice how a specialized algorithm is indeed able to significantly cut down the time required for the computation of the solution.
+In Figure \ref{fig:times} we can notice how a specialized algorithm is indeed able to significantly cut down the time required for the computation of the solution.
 In fact, we can easily notice how, with a standard Gaussian elimination, the required time for solving a $2 \times 10^2$  dimensional matrix is the same it takes for the specialized algorithm to compute $10^6$ points. This yields clearly to a much higher degree of precision and a better deployment of resources.
 As a matter of fact, counting the number of operations contained in the specialised algorithm is $8N$, whereas for the LU decomposition it should amount to $N^2+N^3$. 
 

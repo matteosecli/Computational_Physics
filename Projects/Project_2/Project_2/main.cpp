@@ -29,7 +29,7 @@ void rotate ( mat& A, mat& R, int k, int l, int n ) {
     if ( A(k,l) != 0.0 ) {
         double t, tau;
         tau = (A(l,l) - A(k,k))/(2*A(k,l));
-        if ( tau > 0 ) {
+        if ( tau >= 0 ) {
             t = 1.0/(tau + sqrt(1.0 + tau*tau));
         } else {
             t = -1.0/( -tau + sqrt(1.0 + tau*tau));
@@ -72,13 +72,9 @@ void rotate ( mat& A, mat& R, int k, int l, int n ) {
 /*
 Jacobi's method for finding eigenvalues
 eigenvectors of the symetric matrix A.
-The eigenvalues of A will be on the diagonal
-of A, with eigenvalue i being A[i][i].
-The j-th component of the i-th eigenvector
-is stored in R[i][j].
-A: input matrix (n x n)
-R: empty matrix for eigenvectors (n x n)
-n: dimention of matrices
+Takes as input the matrix A and overwrites
+it with its diagonal form, R that is the rotation
+matrix and n that is the dimension.
 */
 void jacobi_method ( mat& A, mat& R, int n ) {
     // Setting up the eigenvector matrix
@@ -94,7 +90,7 @@ void jacobi_method ( mat& A, mat& R, int n ) {
 
     // Initializing rotation matrix indexes and constraints
     int k, l;
-    double epsilon = 1.0e-8;
+    double epsilon = 1.0e-16;
     double max_number_iterations = pow(n,3);
     int iterations = 0;
     double max_offdiag = maxoffdiag( A, k, l, n );
@@ -109,30 +105,9 @@ void jacobi_method ( mat& A, mat& R, int n ) {
     return;
 }
 
-void order_eigenvals(mat& A, mat& R, int n) {
-	// Define a workspace double
-	double eigenval=0;
-	
-	// Define a workspace vector
-	vec eigenket = zeros<vec>(n-1);
-	
-	// Define the diagonal elements vector
-	vec diag = zeros<vec>(n-1);
-    for(int i=0; i<n-1; i++) diag(i) = A(i,i);
-	
-	// Perform search and mix all the stuff
-//	for(int i = 1, i< n-1)
-	
-	
-}
-
-
-
-
-
 // 'fill_matrix' fills the matrix A in a tridiagonal form.
 // Important: matrix A has to be initialized to zero!
-void fill_matrix(mat& A, double& rho_min, double& rho_max, int n) {
+void fill_matrix(mat& A, double& rho_min, double& rho_max, int n, double w_r) {
     // Calculate step lenght
     double h = (rho_max - rho_min) / n;
     double h_square = pow(h,2);
@@ -144,40 +119,65 @@ void fill_matrix(mat& A, double& rho_min, double& rho_max, int n) {
     V(0)=pow(rho_min,2);
     for(int i = 1; i < n; i++){
         rho(i) = rho(i-1) + h;
-        V(i) = pow(rho(i),2);
+        if(w_r == 0.0) V(i) = pow(rho(i),2);
+        else V(i) = pow(rho(i),2)*pow(w_r,2) + 1.0/rho(i);
     }
 
     //Fill the matrix
     A(0,0) = 2.0/h_square + V(1);
     A(0,1) = -1.0/h_square;
-    for(int i = 1; i < n-2; i++){
+    for(int i = 1; i < n-1; i++){
         A(i,i-1) = -1.0/h_square;
         A(i,i) = 2.0/h_square + V(i+1);
         A(i,i+1) = -1.0/h_square;
     }
-    A(n-2,n-3) = -1.0/h_square;
-    A(n-2,n-2) = 2.0/h_square + V(n-1);
+    A(n-1,n-2) = -1.0/h_square;
+    A(n-1,n-1) = 2.0/h_square + V(n-1);
 }
-
-
-
 
 int main()
 {
-    int n = 200;
-    mat A = zeros<mat>(n-1,n-1);
-    mat R(n-1,n-1);
+    double w_r;
+    cout <<"Insert 0 for a 1-electron problem, otherwise insert omega for 2-electrons:";
+    cin >>w_r;
+    cout << endl;
 
-    double rho_min = 0.0;
-    double rho_max = 5.0;
+    int n;
+    cout <<"Choose n:";
+    cin >>n;
+    cout <<endl;
+    mat A = zeros<mat>(n,n);
+    mat R(n,n);
 
-    fill_matrix(A, rho_min, rho_max, n);
+    double rho_min;
+    double rho_max;
+    cout <<"Choose rho min:";
+    cin >>rho_min;
+    cout <<endl;
+    cout <<"Choose rho max:";
+    cin >>rho_max;
+    cout <<endl;
 
-//    cout << A << endl;
+    fill_matrix(A, rho_min, rho_max, n, 0);
+
+    //Solving the eigenvalues problem with Armadillo
+    mat B;
+    B = A;
+    cx_vec eigval;
+    cx_mat eigvec;
+    eig_gen(eigval, eigvec, B);
+    B.reset();
+    ofstream Arma_eigvaluesfile;
+    Arma_eigvaluesfile.open("Arma_eigvalues.txt");
+    Arma_eigvaluesfile << eigval;
+    Arma_eigvaluesfile.close();
+    ofstream Arma_eigvectorsfile;
+    Arma_eigvectorsfile.open("Arma_eigvectors.txt");
+    Arma_eigvectorsfile << eigvec;
+    Arma_eigvectorsfile.close();
+    eigvec.reset();
 
     jacobi_method(A,R,n-1);
-//    cout << A << endl;
-//    cout << R << endl;
 
     ofstream Afile;
     Afile.open("A.txt");
@@ -194,4 +194,3 @@ int main()
 
     return 0;
 }
-
